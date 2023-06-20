@@ -145,3 +145,17 @@ def signup(request):
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+
+@login_required
+def users_detail(request, user_id):
+    profile = Profile.objects.get(id=user_id)
+    # First, create a list of the toy ids that the cat DOES have
+    # id_list = cat.toys.all().values_list('id')
+    # Query for the toys that the cat doesn't have
+    # by using the exclude() method vs. the filter() method
+    # toys_cat_doesnt_have = Toy.objects.exclude(id__in=id_list)
+    # instantiate FeedingForm to be rendered in detail.html
+    user_form = UserCreationForm()
+    return render(request, 'users/detail.html', {
+        'profile': profile, 'user_form': user_form,
+    })

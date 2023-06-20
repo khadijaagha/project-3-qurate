@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cat Collector</title>
+    <title>Qurate</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -22,6 +22,7 @@
                     <!-- changes below -->
                     <li><a href="{% url 'about' %}">About</a></li>
                     {% if user.is_authenticated %}
+                        <li><a href="{% url 'profile' user.id %}">{{ user.username }}</a></li>
                         <li><a href="{% url 'logout' %}">Log Out</a></li>
                     {% else %}
                         <!-- New Sign Up link -->
@@ -37,7 +38,7 @@
         {% endblock %}
     </main>
   	<footer class="page-footer">
-       <div class="right">All Rights Reserved, &copy; 2022 Cat Collector &nbsp;</div>
+       <div class="right">All Rights Reserved, &copy; 2023 Qurate &nbsp;</div>
     </footer>
 </body>
 </html>
