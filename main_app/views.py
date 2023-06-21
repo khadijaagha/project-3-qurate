@@ -9,7 +9,7 @@ from django.contrib.auth import login
 from main_app.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, Post, Post, Comment
+from .models import Profile, Post, Comment
 from .forms import UserCreationForm
 
 # Create your views here.
@@ -33,7 +33,7 @@ def posts_index(request):
 
 # @login_required
 def posts_detail(request, posts_id):
-    post = Post.objects.get(id=post_id)
+    # post = Post.objects.get(id=post_id)
     # First, create a list of the toy ids that the cat DOES have
     # id_list = cat.toys.all().values_list('id')
     # # Query for the toys that the cat doesn't have
