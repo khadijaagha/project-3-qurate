@@ -9,7 +9,7 @@ from django.contrib.auth import login
 from main_app.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, Post, Comment
+from .models import Profile, Post, Post, Comment
 from .forms import UserCreationForm
 
 # Create your views here.
@@ -18,6 +18,11 @@ def home(request):
 
 def about(request):
     return render(request, 'about.html')
+
+class add_post(CreateView):
+    pass
+    model = Post
+    fields = '__all__'
 
 # @login_required
 def posts_index(request):
