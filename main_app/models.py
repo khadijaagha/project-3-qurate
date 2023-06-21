@@ -10,3 +10,9 @@ class Profile(models.Model):
     date = models.DateField('Creation Date')
 
 #!hello
+
+class Post(models.Model):
+    url = models.CharField(max_length=200)
+
+    def __str__(self):
+        pass
