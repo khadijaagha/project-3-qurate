@@ -57,3 +57,6 @@ class Comment(models.Model):
     likes = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+# class Sub_Comment(Comment):
+#     parent = models.ForeignKey(Comment, on_delete=models.DO_NOTHING)
