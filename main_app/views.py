@@ -25,19 +25,20 @@ def about(request):
 def user_feed(request):
 
     return render(request, 'qurate/feed.html', {
-
+        'title': 'Your Feed'
     })
 
 def explore(request):
         posts = Post.objects.all()
         return render(request, 'qurate/explore.html', {
-        'posts': posts
+        'posts': posts,
+        'title': 'Explore'
     })
 
 
 def inspo(request):
         return render(request, 'qurate/inspiration.html', {
-
+            'title': 'Inspiration'
     })
 
 # @login_required
@@ -49,11 +50,26 @@ def posts_detail(request, posts_id):
 
 class PostCreate(CreateView):
     model = Post
-    fields = ['url', 'title', 'price', 'description', 'tags']
+    fields = ['title', 'price', 'description', 'tags']
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        photo_file = self.request.FILES.get('photo-file', None)
+        if photo_file:
+            s3 = boto3.client('s3')
+            key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+            try:
+                bucket = os.environ['S3_BUCKET']
+                s3.upload_fileobj(photo_file, bucket, key)
+                url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
+                post = form.save(commit=False)
+                post.url = url
+                post.save()
+            except Exception as e:
+                print('An error occurred uploading file to S3')
         return super().form_valid(form)
+        
+
 
 
 
