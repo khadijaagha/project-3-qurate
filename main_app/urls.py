@@ -25,7 +25,6 @@ urlpatterns = [
     path('accounts/signup/', views.signup, name='signup'),
     path('profile/<int:user_id>/', views.users_detail, name='profile'),
     #! ------------------ post paths
-    path('qurate/add_post/', views.add_post.as_view(), name='add_post'),
 ]
 
 

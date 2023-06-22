@@ -22,8 +22,8 @@ class Follows(models.Model):
     following_user_id = models.ForeignKey(User, related_name="followers", on_delete=models.DO_NOTHING)
 
 
-class Tag(models.Model):
-    label = models.CharField(max_length=20)
+# class Tag(models.Model):
+#     label = models.CharField(max_length=20)
 
 
 class Post(models.Model):
@@ -35,7 +35,8 @@ class Post(models.Model):
     price = models.IntegerField()
     description = models.CharField(max_length=300)
     # tags = models.ManyToManyField(Tag, on_delete=models.DO_NOTHING)
-    tags = models.ManyToManyField(Tag)
+    # tags = models.ManyToManyField(Tag)
+    tags = models.CharField(max_length=30)
     # likes = models.IntegerField()
     # ! This might be really slow, but I can only do it this way round as the Post class comes after the Profile class
     #? likes = models.ManyToManyField(Profile, on_delete=models.DO_NOTHING)
