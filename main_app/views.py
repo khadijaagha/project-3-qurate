@@ -1,7 +1,6 @@
 import uuid
 import boto3
 import os
-from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -22,24 +21,21 @@ def about(request):
     return render(request, 'about.html')
 
 
-class add_post(CreateView):
-    # pass
-    model = Post
-    fields = '__all__'
-    def form_valid(self, form):
-        # Assign the logged in user (self.request.user)
-        form.instance.user = self.request.user  # form.instance is the cat
-        # Let the CreateView do its job as usual
-        return super().form_valid(form)
-
-# def add_post(request):
-#     return render(request, 'posts/add_post.html')
-
 # @login_required
-def posts_index(request):
-    # posts = Post.objects.filter(user=request.user)
-    return render(request, 'posts/index.html', {
-        # 'posts': posts
+def user_feed(request):
+
+    return render(request, 'qurate/feed.html', {
+
+    })
+
+def explore(request):
+        return render(request, 'qurate/explore.html', {
+
+    })
+
+def inspo(request):
+        return render(request, 'qurate/inspiration.html', {
+
     })
 
 # @login_required
@@ -57,17 +53,12 @@ def posts_detail(request, posts_id):
         # 'toys': toys_cat_doesnt_have
     })
 
-class PostCreate(LoginRequiredMixin, CreateView):
+class PostCreate(CreateView):
     model = Post
-    fields = '__all__'
-    print('Checkpoint 1')
-    # This inherited method is called when a
-    # valid cat form is being submitted
+    fields = ['url', 'title', 'price', 'description', 'tags']
+
     def form_valid(self, form):
-        print('Checkpoint 2')
-        # Assign the logged in user (self.request.user)
-        form.instance.user = self.request.user  # form.instance is the cat
-        # Let the CreateView do its job as usual
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
 # def PostCreate(request):
