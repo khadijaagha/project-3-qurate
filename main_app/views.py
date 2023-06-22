@@ -22,10 +22,20 @@ def about(request):
 
 
 # @login_required
-def posts_index(request):
-    # posts = Post.objects.filter(user=request.user)
-    return render(request, 'posts/index.html', {
-        # 'posts': posts
+def user_feed(request):
+
+    return render(request, 'qurate/feed.html', {
+
+    })
+
+def explore(request):
+        return render(request, 'qurate/explore.html', {
+
+    })
+
+def inspo(request):
+        return render(request, 'qurate/inspiration.html', {
+
     })
 
 # @login_required

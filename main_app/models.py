@@ -44,6 +44,9 @@ class Post(models.Model):
     def __str__(self):
         pass 
 
+    def get_absolute_url(self):
+        return reverse('index')
+
 
 class Comment(models.Model):
     # ? Changed this to reference User rather than Profile, as it allowed for the profile model to consolidate more information

@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='profile',
-            name='date',
+            name='test',
         ),
         migrations.AddField(
             model_name='profile',
