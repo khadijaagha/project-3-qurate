@@ -195,3 +195,8 @@ def users_detail(request, user_id):
         'posts': user_posts
     })
 
+
+# @login_required
+def like_post(request):
+    
+    pass
