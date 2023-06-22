@@ -29,9 +29,11 @@ def user_feed(request):
     })
 
 def explore(request):
+        posts = Post.objects.all()
         return render(request, 'qurate/explore.html', {
-
+        'posts': posts
     })
+
 
 def inspo(request):
         return render(request, 'qurate/inspiration.html', {
@@ -102,9 +104,3 @@ def users_detail(request, user_id):
         'profile': profile, 'user_form': user_form,
     })
 
-
-def explore_index(request):
-    posts = Post.objects.all()
-    return render(request, 'qurate/explore.html', {
-        'posts': posts
-    })
