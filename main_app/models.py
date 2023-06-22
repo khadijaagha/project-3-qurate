@@ -30,6 +30,7 @@ from django.contrib.auth.models import User
 
 class Post(models.Model):
     url = models.CharField(max_length=200)
+    # url = models.ImageField()
     # ? Changed this to reference User rather than Profile, as it allowed for the profile model to consolidate more information
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)

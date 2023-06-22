@@ -67,7 +67,7 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 
 
 def add_comment(request, post_id):
- return render(request, 'posts/add_comment.html', {
+    return render(request, 'posts/add_comment.html', {
 
     })
 
