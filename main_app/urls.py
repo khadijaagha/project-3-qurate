@@ -7,7 +7,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     #! --- DIFFERENT FEEDS/EXPLORE/INSPO
     path('qurate/', views.user_feed, name='user_feed'),
-    path('qurate/explore/', views.explore, name='explore'),
+    path('explore/', views.explore, name='explore'),
     path('qurate/inspiration/', views.inspo, name='inspo'),
     #!----POST ROUTES-----
     path('posts/<int:post_id>/', views.posts_detail, name='detail'),
