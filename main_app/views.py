@@ -127,10 +127,14 @@ def signup(request):
     return render(request, 'registration/signup.html', context)
 
 @login_required
+#! someone fix plz profile is always  1 behind user
 def users_detail(request, user_id):
-    profile = Profile.objects.get(id=user_id)
-    user_form = UserCreationForm()
+    profile = Profile.objects.get(id=user_id - 1)
+    user_posts = Post.objects.filter(user=user_id)
+    profile1down = profile.user
     return render(request, 'users/detail.html', {
-        'profile': profile, 'user_form': user_form,
+        #! fix this!!!
+        'title': f"{profile.user}'s Pofile",
+        'posts': user_posts
     })
 

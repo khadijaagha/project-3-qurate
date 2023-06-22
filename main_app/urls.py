@@ -17,6 +17,7 @@ urlpatterns = [
     #!----COMMENT ROUTES-----
     path('posts/<int:post_id>/add_comment/', views.add_comment, name='add_comment'),
     path('posts/<int:pk>/comment/<int:fk>/delete/', views.CommentDelete.as_view(), name='comment_delete'),
+    #!------------ USER ROUTES 
     path('accounts/signup/', views.signup, name='signup'),
     path('profile/<int:user_id>/', views.users_detail, name='profile'),
     #! -------------- TAG ROUTES
