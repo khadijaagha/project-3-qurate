@@ -19,5 +19,6 @@ urlpatterns = [
     path('posts/<int:pk>/comment/<int:fk>/delete/', views.CommentDelete.as_view(), name='comment_delete'),
     path('accounts/signup/', views.signup, name='signup'),
     path('profile/<int:user_id>/', views.users_detail, name='profile'),
-    #! ------------------ post paths
+    #! -------------- TAG ROUTES
+    path('qurate/<str:tags>/', views.tags_index, name='tags')
 ]
