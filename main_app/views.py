@@ -1,6 +1,8 @@
 import uuid
 import boto3
 import os
+from django.forms.models import BaseModelForm
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
@@ -19,10 +21,19 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
+
 class add_post(CreateView):
-    pass
+    # pass
     model = Post
     fields = '__all__'
+    def form_valid(self, form):
+        # Assign the logged in user (self.request.user)
+        form.instance.user = self.request.user  # form.instance is the cat
+        # Let the CreateView do its job as usual
+        return super().form_valid(form)
+
+# def add_post(request):
+#     return render(request, 'posts/add_post.html')
 
 # @login_required
 def posts_index(request):
@@ -49,14 +60,18 @@ def posts_detail(request, posts_id):
 class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
     fields = '__all__'
-    
+    print('Checkpoint 1')
     # This inherited method is called when a
     # valid cat form is being submitted
     def form_valid(self, form):
+        print('Checkpoint 2')
         # Assign the logged in user (self.request.user)
         form.instance.user = self.request.user  # form.instance is the cat
         # Let the CreateView do its job as usual
         return super().form_valid(form)
+
+# def PostCreate(request):
+
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
