@@ -186,3 +186,4 @@ def explore_index(request):
     return render(request, 'qurate/explore.html', {
         'posts': posts
     })
+
