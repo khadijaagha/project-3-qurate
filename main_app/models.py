@@ -45,7 +45,7 @@ class Post(models.Model):
         pass 
 
     def get_absolute_url(self):
-        return reverse('index')
+        return reverse('user_feed')
 
 
 class Comment(models.Model):
