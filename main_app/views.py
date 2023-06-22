@@ -1,8 +1,10 @@
 import uuid
 import boto3
 import os
+import requests
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
@@ -12,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Profile, Post, Comment
 from .forms import UserCreationForm
+from django_ratelimit.decorators import ratelimit
 
 # Create your views here.
 def home(request):
@@ -28,11 +31,42 @@ def user_feed(request):
         'title': 'Your Feed'
     })
 
+# def explore(request):
+#         posts = Post.objects.all()
+#         return render(request, 'qurate/explore.html', {
+#         'posts': posts,
+#         'title': 'Explore'
+#     })
+
+# @ratelimit(key = ratelimitkey(user = 'user', rate = '10/s', method = ratelimit.ALL))
+@ratelimit(key = 'ip', rate = '79/s', method = ratelimit.ALL)
 def explore(request):
-        posts = Post.objects.all()
-        return render(request, 'qurate/explore.html', {
+    # pull data from 3rd party rest API
+    # posts = Post.objects.all()
+    response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
+    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
+    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
+    # convert reponse data into json
+    explore_data = response.json()
+    # ? change to explore_data['objectIDs'], pass that through, figure that out on front end
+    posts = []
+    idx = 0
+    for post in explore_data['objectIDs']:
+        print('Checkpoint ', idx)
+        response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
+        explore = response.json()
+        posts.append(explore) 
+        idx += 1
+        if idx == 20:
+            break
+    # print(explore['objectIDs'])
+    # print(posts)
+    print('Checkpoint 2')
+    # return HttpResponse("Explore")
+    return render(request, 'qurate/explore.html', {
         'posts': posts,
-        'title': 'Explore'
+        # 'explore': explore['objectIDs'],
+        'title': 'Explore',
     })
 
 
