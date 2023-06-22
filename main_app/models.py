@@ -5,43 +5,39 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
-class Profile(models.Model):
+# ? class Profile(models.Model):
+# ?     user = models.OneToOneField(User, on_delete=models.CASCADE)
+# ?     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Follows(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    #! To reference following and followers, might have to use user.id
-    # following_users = models.ManyToManyField(User)
-    # follower_users = models.ManyToManyField(User)
-    # followers = models.ManyToManyField('self', related_name='follower',blank=True)
-    # following = models.ManyToManyField('self', related_name='following',blank=True)
-    #! posts = models.ForeignKey()
-    # post_likes = models.ManyToManyField(Post, on_delete=models.DO_NOTHING)
-    # post_likes = models.ManyToManyField(Post, on_delete=models.DO_NOTHING)
-
-# class Follows(models.Model):
-    # following_user_id = models.ManyToManyField(User)
-    # user_id = models.ForeignKey(User, related_name="following", on_delete=models.DO_NOTHING)
-    # following_user_id = models.ForeignKey(User, related_name="followers", on_delete=models.DO_NOTHING)
+    following_user = models.ForeignKey(User, related_name="following", on_delete=models.DO_NOTHING)
+    follower_user = models.ForeignKey(User, related_name="followers", on_delete=models.DO_NOTHING)
+    date_followed = models.DateTimeField(auto_now_add=True, db_index=True)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user_id','following_user_id'],  name="unique_followers")
+        ]
+        ordering = ["-date_followed"]
+    def __str__(self):
+        f"{self.user_id} follows {self.following_user_id}"
 
 
-class Tag(models.Model):
-    label = models.CharField(max_length=20)
+# class Tag(models.Model):
+#     label = models.CharField(max_length=20)
 
 
 class Post(models.Model):
     url = models.CharField(max_length=200)
-    # url = models.ImageField()
-    # profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    # ? Changed this to reference User rather than Profile, as it allowed for the profile model to consolidate more information
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    price = models.IntegerField()
-    description = models.CharField(max_length=300)
-    # tags = models.ManyToManyField(Tag, on_delete=models.DO_NOTHING)
-    tags = models.ManyToManyField(Tag)
-    # ! This might be really slow, but I can only do it this way round as the Post class comes after the Profile class
-    #? likes = models.ManyToManyField(Profile, on_delete=models.DO_NOTHING)
-    # likes = models.ManyToManyField(Profile)
-    likes = models.IntegerField()
-    # ! End Note
+    price = models.IntegerField(blank=True)
+    description = models.CharField(max_length=300, blank=True)
+    # tags = models.ManyToManyField(Tag)
+    tags = models.CharField(max_length=30, blank=True)
+    likes = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -50,20 +46,25 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    # url = models.CharField(max_length=200)
-    profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    # ? Changed this to reference User rather than Profile, as it allowed for the profile model to consolidate more information
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    # parent = models.ForeignKey(Comment, on_delete=models.DO_NOTHING)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
     body = models.TextField(max_length=500)
-    likes = models.IntegerField()
+    likes = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 # class Sub_Comment(Comment):
 #     parent = models.ForeignKey(Comment, on_delete=models.DO_NOTHING)
 
-class User_likes(models.Model):
-    # following_user_id = models.ManyToManyField(User)
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
-    # post_likes = models.ForeignKey(User, related_name="followers", on_delete=models.DO_NOTHING)
-    # comment_likes = models.ForeignKey(User, related_name="followers", on_delete=models.DO_NOTHING)
+# class User_likes(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     posts = models.ManyToManyField(Post, related_name="posts_liked")
+#     comments = models.ManyToManyField(Comment, related_name="comments_liked")
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    post_likes = models.ManyToManyField(Post, related_name="posts_liked")
+    comment_likes = models.ManyToManyField(Comment, related_name="comments_liked")
