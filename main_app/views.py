@@ -65,7 +65,6 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 
 
 def add_comment(request, post_id):
-
  return render(request, 'posts/add_comment.html', {
 
     })
@@ -101,4 +100,11 @@ def users_detail(request, user_id):
     user_form = UserCreationForm()
     return render(request, 'users/detail.html', {
         'profile': profile, 'user_form': user_form,
+    })
+
+
+def explore_index(request):
+    posts = Post.objects.all()
+    return render(request, 'qurate/explore.html', {
+        'posts': posts
     })
