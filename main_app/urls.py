@@ -7,7 +7,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     #! --- DIFFERENT FEEDS/EXPLORE/INSPO
     path('qurate/', views.user_feed, name='user_feed'),
-    path('qurate/explore/', views.explore, name='explore'),
+    path('explore/', views.explore, name='explore'),
     path('qurate/inspiration/', views.inspo, name='inspo'),
     #!----POST ROUTES-----
     path('posts/<int:post_id>/', views.posts_detail, name='detail'),
@@ -17,7 +17,9 @@ urlpatterns = [
     #!----COMMENT ROUTES-----
     path('posts/<int:post_id>/add_comment/', views.add_comment, name='add_comment'),
     path('posts/<int:pk>/comment/<int:fk>/delete/', views.CommentDelete.as_view(), name='comment_delete'),
+    #!------------ USER ROUTES 
     path('accounts/signup/', views.signup, name='signup'),
     path('profile/<int:user_id>/', views.users_detail, name='profile'),
-    #! ------------------ post paths
+    #! -------------- TAG ROUTES
+    path('qurate/<str:tags>/', views.tags_index, name='tags')
 ]

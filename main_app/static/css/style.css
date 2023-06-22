@@ -21,6 +21,65 @@ footer.page-footer {
 img {
   margin: 0 auto;
 }
+
+/* ! INDI POST STYLING --------------- */
+
+.post-container {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+grid-template-rows: 1fr 5fr 1fr;
+grid-column-gap: 0px;
+grid-row-gap: 0px;
+background: grey;
+width: 25vw;
+height: 45vh;
+box-shadow: 0 1px 2px black;
+}
+
+.top-left-post { grid-area: 1 / 1 / 2 / 2; }
+.top-right-post { grid-area: 1 / 2 / 2 / 3; }
+.middle-post { grid-area: 2 / 1 / 3 / 3; }
+.bottom-left-post { grid-area: 3 / 1 / 4 / 2; }
+.bottom-right-post { grid-area: 3 / 2 / 4 / 3; }
+
+
+
+.post-img {
+  max-width: 23vw;
+  max-height: 30vh;
+  box-shadow: 0 4px 4px black;
+}
+
+.top-left-post, .top-right-post, .middle-post, .bottom-left-post, .bottom-right-post {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.top-left-post {
+
+}
+
+.top-right-post {
+
+}
+
+.middle-post {
+
+}
+
+.bottom-left-post {
+  
+}
+
+.bottom-right-post {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
 /* !! base.html */
 
 .content-container {
@@ -101,11 +160,12 @@ img {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 10vw;
+  row-gap: 4vh;
   align-items: flex-start;
   overflow-y: auto;
   padding-left: 2vw;
   padding-right: 2vw;
+  padding-top: 2vh;
   margin-right: .5vw;
 }
 
@@ -124,6 +184,8 @@ img {
     background-color: pink;
   }
 
+/* !------------- explore page */
+
 .explore-body{
   
   display: flex;
@@ -139,3 +201,4 @@ img {
   border-radius: 4px;
   background-color: rgb(219, 69, 94);
 }
+

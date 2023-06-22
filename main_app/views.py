@@ -23,7 +23,7 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
-
+# ! PAGES --------------------------
 # @login_required
 def user_feed(request):
 
@@ -82,6 +82,8 @@ def posts_detail(request, posts_id):
 
     })
 
+# ! POSTS ------------------
+
 class PostCreate(CreateView):
     model = Post
     fields = ['title', 'price', 'description', 'tags']
@@ -115,6 +117,7 @@ class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = '/posts'
 
+# ! COMMENTS ---------------------
 
 def add_comment(request, post_id):
     return render(request, 'posts/add_comment.html', {
@@ -126,6 +129,17 @@ class CommentDelete(LoginRequiredMixin, DeleteView):
     model = Comment
 
 
+# ! TAGS ----------------------
+def tags_index(request, tags):
+    posts = Post.objects.filter(tags=tags)
+    return render(request, 'qurate/tags.html', {
+        'title': '#' + tags,
+        'posts': posts
+    })
+
+
+
+# ! USERS --------------------
 
 def signup(request):
     error_message = ''
@@ -147,10 +161,14 @@ def signup(request):
     return render(request, 'registration/signup.html', context)
 
 @login_required
+#! someone fix plz profile is always  1 behind user
 def users_detail(request, user_id):
-    profile = Profile.objects.get(id=user_id)
-    user_form = UserCreationForm()
+    profile = Profile.objects.get(id=user_id - 1)
+    user_posts = Post.objects.filter(user=user_id)
+    profile1down = profile.user
     return render(request, 'users/detail.html', {
-        'profile': profile, 'user_form': user_form,
+        #! fix this!!!
+        'title': f"{profile.user}'s Pofile",
+        'posts': user_posts
     })
 

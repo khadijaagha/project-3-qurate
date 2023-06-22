@@ -2,48 +2,54 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qurate</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-</head>
-<body>
-<container class="content-container">
-<section class="nav-bar">
-  <section class="profile-card">
-    <p><img class="profile-icon" src="https://thenounproject.com/api/private/icons/3764854/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"</p>
-    <p>Profile name</p>
-    <p>Followers: XXX</p>
-    <p>Posts: XXX</p>
-  </section>
-  <section class="nav">
-    <ul class="nav-ul">
-      <!-- widget by Ranah Pixel Studio from <a href="https://thenounproject.com/browse/icons/term/widget/" target="_blank" title="widget Icons">Noun Project</a> -->
-      <li><a><img title="search" class="icons" src="https://thenounproject.com/api/private/icons/1060100/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0">search</a></li>
-      <li><a href="{% url 'user_feed' %}"><img title="Feed" class="icons" src="https://thenounproject.com/api/private/icons/104463/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
-      <li><a href="{% url 'explore' %}"><img title="Explore" class="icons" src="https://thenounproject.com/api/private/icons/83759/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
-      <li><a href="{% url 'inspo' %}"><img title="Inspiration" class="icons" src="https://thenounproject.com/api/private/icons/996350/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
-      <li><a href="{% url 'logout' %}"><img title="Log Out" class="icons" src="https://thenounproject.com/api/private/icons/976217/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
-    </ul>
-  </section>
-</section>
-<section class="heading-section">
-  <div class="heading">
-    <p>{{ title }}</p>
-  </div>
-</section>
-<container class="main-content">
-  <section class="posts-section">
-    <!-- code for rendering posts -->
-    {% block content %}
-    {% endblock %}
-  </section>
-</container>
-</container>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qurate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  </head>
+  <body>
+    <container class="content-container">
+      <section class="nav-bar">
+        <section class="profile-card">
+          <a href="{% url 'profile' user_id=user.id %}"><img class="profile-icon" src="https://thenounproject.com/api/private/icons/3764854/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a>
+          <p>{{ user }}</p>
+          <p>Followers: XXX</p>
+          <p>Posts: XXX</p>
+        </section>
+        <section class="nav">
+          <ul class="nav-ul">
+            <!-- widget by Ranah Pixel Studio from <a href="https://thenounproject.com/browse/icons/term/widget/" target="_blank" title="widget Icons">Noun Project</a> -->
+            <!-- <li><a><img title="search" class="icons" src="https://thenounproject.com/api/private/icons/1060100/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0">search</a></li> -->
+            <form>
+              <div class="input-field">
+                <input id="search" type="search" required>
+                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+              </div>
+            </form>
+            <li><a href="{% url 'user_feed' %}"><img title="Feed" class="icons" src="https://thenounproject.com/api/private/icons/104463/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
+            <li><a href="{% url 'explore' %}"><img title="Explore" class="icons" src="https://thenounproject.com/api/private/icons/83759/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
+            <li><a href="{% url 'inspo' %}"><img title="Inspiration" class="icons" src="https://thenounproject.com/api/private/icons/996350/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
+            <li><a href="{% url 'logout' %}"><img title="Log Out" class="icons" src="https://thenounproject.com/api/private/icons/976217/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
+          </ul>
+        </section>
+      </section>
+      <section class="heading-section">
+        <div class="heading">
+          <p>{{ title }}</p>
+        </div>
+      </section>
+      <container class="main-content">
+        <section class="posts-section">
+          {% block content %}
+          {% endblock %}
+        </section>
+      </container>
+    </container>
+  </body>
 </html>
 
 <!-- Change -->

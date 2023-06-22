@@ -1,22 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>User Profile</h1>
+
 
 <div class="row">
-  <div class="col s6">
     <div class="card">
       <div class="card-content">
         <span class="card-title">{{ user.username }}</span>
         <p>Username: {{ user.username }}</p>
-        <p>First Name: {{ user.first_name }}</p>
-        <p>Last Name: {{ user.last_name }}</p>
-        <p>email: {{ user.email }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Posts: 30</p>
+        <p>Followers: 14.5k</p>
       </div>
     </div>
-  </div>
 </div>
-
+{% for post in posts %}
+<container class="post-container">
+    <section class="top-left-post">
+        <div class="user_container">@{{post.user}}</div>
+    </section>
+    <section class="top-right-post">
+        <div class="price_container">{{ post.price }}</div>
+    </section>
+    <section class="middle-post">
+        <div class="img-container"><img class="post-img" src="{{ post.url }}">  </div>
+    </section>
+    <section class="bottom-left-post">
+        <div class="title">{{post.title}}</div>
+        <div class="description_container">{{ post.description }}</div>
+    </section>
+    <section class="bottom-right-post">
+        <div class="likes_container">{{ post.likes }}</div>
+        <a href="{% url 'tags' tags=post.tags %}"><p>#{{ post.tags }}</p></a>
+    </section>
+</container> 
+{% endfor %}
 
   
 {% endblock %}
