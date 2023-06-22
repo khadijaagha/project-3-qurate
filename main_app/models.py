@@ -10,18 +10,18 @@ from django.contrib.auth.models import User
 # ?     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class Follows(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    following_user = models.ForeignKey(User, related_name="following", on_delete=models.DO_NOTHING)
-    follower_user = models.ForeignKey(User, related_name="followers", on_delete=models.DO_NOTHING)
-    date_followed = models.DateTimeField(auto_now_add=True, db_index=True)
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['user_id','following_user_id'],  name="unique_followers")
-        ]
-        ordering = ["-date_followed"]
-    def __str__(self):
-        f"{self.user_id} follows {self.following_user_id}"
+# class Follow(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     following_user = models.ForeignKey(User, related_name="following", on_delete=models.DO_NOTHING)
+#     follower_user = models.ForeignKey(User, related_name="followers", on_delete=models.DO_NOTHING)
+#     date_followed = models.DateTimeField(auto_now_add=True, db_index=True)
+#     class Meta:
+#         constraints = [
+#             models.UniqueConstraint(fields=['following_user','follower_user'],  name="unique_followers")
+#         ]
+#         ordering = ["-date_followed"]
+#     def __str__(self):
+#         f"{self.user_id} follows {self.following_user_id}"
 
 
 # class Tag(models.Model):
@@ -68,3 +68,9 @@ class Profile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     post_likes = models.ManyToManyField(Post, related_name="posts_liked")
     comment_likes = models.ManyToManyField(Comment, related_name="comments_liked")
+    following_list = models.ManyToManyField('self', through='Follow_List')
+    follower_list = models.ManyToManyField('self')
+
+class Follow_List(models.Model):
+    following = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    date = models.DateTimeField(auto_now_add=True, db_index=True)
