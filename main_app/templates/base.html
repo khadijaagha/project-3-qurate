@@ -22,17 +22,17 @@
   <section class="nav">
     <ul class="nav-ul">
       <!-- widget by Ranah Pixel Studio from <a href="https://thenounproject.com/browse/icons/term/widget/" target="_blank" title="widget Icons">Noun Project</a> -->
-      <li><a>search</a></li>
-      <li><a href="{% url 'user_feed' %}"><img title="Feed"class="icons" src="https://thenounproject.com/api/private/icons/3764890/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
-      <li><a href="{% url 'explore' %}"><img title="Explore"class="icons" src="https://thenounproject.com/api/private/icons/3765444/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
-      <li><a href="{% url 'inspo' %}"><img title="Inspiration"class="icons" src="https://thenounproject.com/api/private/icons/3765497/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
-      <li><a href="{% url 'logout' %}"><img title="Log Out"class="icons" src="https://thenounproject.com/api/private/icons/3764877/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
+      <li><a><img title="search" class="icons" src="https://thenounproject.com/api/private/icons/1060100/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0">search</a></li>
+      <li><a href="{% url 'user_feed' %}"><img title="Feed" class="icons" src="https://thenounproject.com/api/private/icons/104463/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
+      <li><a href="{% url 'explore' %}"><img title="Explore" class="icons" src="https://thenounproject.com/api/private/icons/83759/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
+      <li><a href="{% url 'inspo' %}"><img title="Inspiration" class="icons" src="https://thenounproject.com/api/private/icons/996350/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
+      <li><a href="{% url 'logout' %}"><img title="Log Out" class="icons" src="https://thenounproject.com/api/private/icons/976217/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a></li>
     </ul>
   </section>
 </section>
 <section class="heading-section">
   <div class="heading">
-    <p>your feed</p>
+    <p>{{ title }}</p>
   </div>
 </section>
 <container class="main-content">
