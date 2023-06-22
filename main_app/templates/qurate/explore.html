@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+<h1>Explore</h1>
+<div class="explore-body">
+
+    {% for post in posts %}
+    
+    <div class="explore-container">
+        <div class="img-container"> {{ post.url }} </div>
+        <div class="user_container">@{{post.user}}</div>
+        <div class="title">@{{post.title}}</div>
+        <div class="description_container">{{ post.description }}</div>
+        <div class="likes_container">{{ post.likes }}</div>
+        <div class="price_container">{{ post.price }}</div>
+        <div class="tags_container">{{ post.tags }}</div>
+    </div> 
+</div>
+    {% endfor %}
+    {% endblock %}
+    

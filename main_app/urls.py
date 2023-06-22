@@ -14,6 +14,8 @@ urlpatterns = [
     #!----COMMENT ROUTES-----
     path('posts/<int:post_id>/add_comment/', views.add_comment, name='add_comment'),
     path('posts/<int:pk>/comment/<int:fk>/delete/', views.CommentDelete.as_view(), name='comment_delete'),
+    #!----EXPLORE PAGE ROUTES-----
+    path('explore/', views.explore_index, name='explore_index'),
     # path('posts/<int:cat_id>/add_photo/', views.add_photo, name='add_photo'),
     # path('posts/<int:cat_id>/assoc_toy/<int:toy_id>/', views.assoc_toy, name='assoc_toy'),
     # path('posts/<int:cat_id>/unassoc_toy/<int:toy_id>/', views.unassoc_toy, name='unassoc_toy'),

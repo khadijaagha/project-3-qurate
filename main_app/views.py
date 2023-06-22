@@ -76,7 +76,7 @@ def add_comment(request, post_id):
     #     # We want a model instance, but
     #     # we can't save to the db yet
     #     # because we have not assigned the
-    #     # cat_id FK.
+    #     #! similarly, for post_id FK cat_id FK. 
     #     new_comment = form.save(commit=False)
     #     new_comment.post_id = post_id
     #     new_comment.save()
@@ -172,4 +172,11 @@ def users_detail(request, user_id):
     user_form = UserCreationForm()
     return render(request, 'users/detail.html', {
         'profile': profile, 'user_form': user_form,
+    })
+
+
+def explore_index(request):
+    posts = Post.objects.all()
+    return render(request, 'qurate/explore.html', {
+        'posts': posts
     })
