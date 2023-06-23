@@ -14,7 +14,7 @@ urlpatterns = [
     path('posts/create/', views.PostCreate.as_view(), name='post_create'),
     path('posts/<int:pk>/update/', views.PostUpdate.as_view(), name='post_update'),
     path('posts/<int:pk>/delete/', views.PostDelete.as_view(), name='post_delete'),
-    path('like-post', views.like_post, name='like-post'),
+
 
     #!----COMMENT ROUTES-----
     path('posts/<int:post_id>/add_comment/', views.add_comment, name='add_comment'),
