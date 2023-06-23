@@ -141,6 +141,7 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
 class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
+    # if request.method == 'POST':
     success_url = '/qurate'
 
 # ! COMMENTS ---------------------
