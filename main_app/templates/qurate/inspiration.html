@@ -6,8 +6,16 @@
                 <div><a href="https://collectionapi.metmuseum.org/public/collection/v1/objects/{{post}}"></a></div>
             <section class="top-left-post">
                 <script>
-                    const response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/{{post}}').json
-                    
+                    // const response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/{{post}}').json
+                    console.log("checkpoint 1.1");
+                    async function logJSONData() {
+                        const response = await
+                        console.log("checkpoint 1.2");
+                    fetch("https://collectionapi.metmuseum.org/public/collection/v1/objects/{{post}}");
+                        console.log("checkpoint 1.3");
+                        const jsonData = await response.json();
+                        console.log(jsonData);
+                    }
                 </script>
                 <div class="user_container">@{{ response }}</div>
             </section>
