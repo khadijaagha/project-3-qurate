@@ -111,7 +111,7 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
 class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
-    success_url = '/posts'
+    success_url = '/qurate'
 
 # ! COMMENTS ---------------------
 
