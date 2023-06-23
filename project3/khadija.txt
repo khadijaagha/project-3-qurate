@@ -1,0 +1,9 @@
+in models.py of Post class:
+Shall we add this to get the details functionality working:
+
+    def get_absolute_url(self):
+        return reverse('user_feed', 'detail', kwargs={'post_id': seld.id})
+
+        
+
+
