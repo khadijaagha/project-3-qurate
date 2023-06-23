@@ -11,7 +11,7 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, Post, Comment
+from .models import Profile, Post, Comment, User
 from .forms import UserCreationForm
 from django_ratelimit.decorators import ratelimit
 
@@ -219,3 +219,18 @@ def follow(request, user_id):
         'post_count': post_count
     })
 
+
+# ! SEARCH ----------------
+
+def search(request):
+    search_content = request.POST.get('search')
+    tags = []
+    users = []
+    if search_content[0] == '#':
+        tags = Post.objects.filter(tags__icontains=search_content)
+    else:
+        users = User.objects.filter(username__icontains=search_content)
+    return render(request, 'qurate/search.html', {
+        'users': users,
+        'tags': tags
+    })

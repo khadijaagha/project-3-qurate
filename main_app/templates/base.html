@@ -23,9 +23,10 @@
           <ul class="nav-ul">
             <!-- widget by Ranah Pixel Studio from <a href="https://thenounproject.com/browse/icons/term/widget/" target="_blank" title="widget Icons">Noun Project</a> -->
             <!-- <li><a><img title="search" class="icons" src="https://thenounproject.com/api/private/icons/1060100/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0">search</a></li> -->
-            <form>
+            <form method="POST" action="{% url 'search' %}">
               <div class="input-field">
-                <input id="search" type="search" required>
+                {% csrf_token %}
+                <input id="search" type="search" name="search" required>
                 <label class="label-icon" for="search"><i class="material-icons">search</i></label>
                 <i class="material-icons">close</i>
               </div>
