@@ -4,7 +4,6 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
-    path('about/', views.about, name='about'),
     #! --- DIFFERENT FEEDS/EXPLORE/INSPO
     path('qurate/', views.user_feed, name='user_feed'),
     path('explore/', views.explore, name='explore'),
@@ -22,6 +21,7 @@ urlpatterns = [
     #!------------ USER ROUTES 
     path('accounts/signup/', views.signup, name='signup'),
     path('profile/<int:user_id>/', views.users_detail, name='profile'),
+    path('profile/<int:user_id>/', views.follow, name='follow'),
     #! -------------- TAG ROUTES
     path('qurate/<str:tags>/', views.tags_index, name='tags')
 ]
