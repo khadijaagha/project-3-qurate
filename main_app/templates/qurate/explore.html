@@ -1,35 +1,5 @@
 {% extends 'base.html' %}
-
-
-
 {% block content %}
-
-
-    <!-- {% for post in posts %}
-    
-    <div class="explore-container">
-        <div class="img-container"><img src="{{ post.url }}">  </div>
-        <div class="user_container">@{{post.user}}</div>
-        <div class="title">@{{post.title}}</div>
-        <div class="description_container">{{ post.description }}</div>
-        <div class="likes_container">{{ post.likes }}</div>
-        <div class="price_container">{{ post.price }}</div>
-        <div class="tags_container">{{ post.tags }}</div>
-    </div> 
-</div>
-    {% endfor %} -->
-    <!-- {{ explore }} -->
-    <!-- <div class="img-container"><img src="https://images.metmuseum.org/CRDImages/as/original/DP214271_CRD.jpg">  </div> -->
-    <!-- <div class="img-container"><img src="{{ explore.primaryImage }}">  </div> -->
-    {% for post in posts %}
-    <!-- <img src="https://collectionapi.metmuseum.org/public/collection/v1/objects/{{post}}"> -->
-    <div class="explore-container">
-        <div class="img-container"><img src="{{ post.primaryImage }}">  </div>
-    </div> 
-</div>
-    {% endfor %}
-
-
     {% for post in posts %}
     <container class="post-container">
         <section class="top-left-post">
@@ -51,7 +21,6 @@
         </section>
     </container> 
     {% endfor %}
-
 {% endblock %}
     
 
