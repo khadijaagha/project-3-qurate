@@ -1,1 +1,2 @@
 pip install requests
+a href="/like-post?post_id={{ post.id }}

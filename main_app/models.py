@@ -40,6 +40,7 @@ class Post(models.Model):
     # tags = models.ManyToManyField(Tag)
     tags = models.CharField(max_length=30, blank=True)
     likes = models.IntegerField(default=0)
+    #likes = model.ManyToManyField(User, related_name = 'qurate_posts')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -49,6 +50,12 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('user_feed')
 
+# class LikePost(models.Model):
+#     post = models.ForeignKey(Post, )
+#     username = models.CharField(max_length=100)
+
+    # def __str__(self):
+    #     return self.username
 
 class Comment(models.Model):
     # ? Changed this to reference User rather than Profile, as it allowed for the profile model to consolidate more information

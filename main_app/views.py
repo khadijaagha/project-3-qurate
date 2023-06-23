@@ -4,13 +4,9 @@ import os
 import requests
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
-# from django.contrib.auth.forms import UserCreationForm
-from main_app.forms import UserCreationForm
-# ? from .forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Profile, Post, Comment
@@ -195,4 +191,3 @@ def users_detail(request, user_id):
         'title': f"{profile.user}'s Pofile",
         'posts': user_posts
     })
-
