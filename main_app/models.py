@@ -40,6 +40,7 @@ class Post(models.Model):
     # tags = models.ManyToManyField(Tag)
     tags = models.CharField(max_length=30, blank=True)
     likes = models.IntegerField(default=0)
+    #likes = model.ManyToManyField(User, related_name = 'qurate_posts')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -49,6 +50,12 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('user_feed')
 
+# class LikePost(models.Model):
+#     post = models.ForeignKey(Post, )
+#     username = models.CharField(max_length=100)
+
+    # def __str__(self):
+    #     return self.username
 
 class Comment(models.Model):
     # ? Changed this to reference User rather than Profile, as it allowed for the profile model to consolidate more information
@@ -73,14 +80,22 @@ class Profile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     post_likes = models.ManyToManyField(Post, related_name="posts_liked", blank=True)
     comment_likes = models.ManyToManyField(Comment, related_name="comments_liked", blank=True)
+<<<<<<< HEAD
     # following_list = models.ManyToManyField('self', through='Follow_List', blank=True)
     # # ? Follower list might need to be removed down the line, I haven't seen it in any profile examples I've seen
     # follower_list = models.ManyToManyField('self', blank=True)
     following_list = models.ManyToManyField('self', through='Follow_List', blank=True)
     follower_list = models.ManyToManyField('self', symmetrical=False, blank=True)
 
+=======
+    # following_list = models.ManyToManyField('self', through='Follow_List', blank=True, symmetrical=False)
+    # # ? Follower list might need to be removed down the line, I haven't seen it in any profile examples I've seen
+    # follower_list = models.ManyToManyField('self', blank=True)
+    follows = models.ManyToManyField('self', related_name='followed_by', blank=True, symmetrical=False)
+>>>>>>> development
     def __str__(self):
-        return f'{self.user} user.id: ({self.user_id}) profile id: ({self.id})'
+        # return self.user.username
+        return f'{self.user.username} - user.id: ({self.user_id}) profile id: ({self.id})'
 
 def create_profile(sender, instance, created, **kwargs):
     if created:
@@ -89,6 +104,6 @@ def create_profile(sender, instance, created, **kwargs):
 
 post_save.connect(create_profile, sender=User)
 
-class Follow_List(models.Model):
-    following = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    date = models.DateTimeField(auto_now_add=True, db_index=True)
+# class Follow_List(models.Model):
+#     following = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+#     date = models.DateTimeField(auto_now_add=True, db_index=True)

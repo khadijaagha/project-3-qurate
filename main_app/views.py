@@ -9,8 +9,6 @@ from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
-# from django.contrib.auth.forms import UserCreationForm
-from main_app.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Profile, Post, Comment
@@ -51,57 +49,57 @@ def inspo(request):
     # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
     # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
     # convert reponse data into json
-    explore_data = response.json()
-    # ? change to explore_data['objectIDs'], pass that through, figure that out on front end
-    posts = []
-    idx = 0
-    for post in explore_data['objectIDs']:
-        print('Checkpoint ', idx)
-        response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
-        explore = response.json()
-        posts.append(explore) 
-        idx += 1
-        if idx == 20:
-            break
-    # print(explore['objectIDs'])
-    # print(posts)
-    print('Checkpoint 2')
-    # return HttpResponse("Explore")
-    return render(request, 'qurate/inspiration.html', {
-        'posts': posts,
-        # 'explore': explore['objectIDs'],
-        'title': 'Inspiration',
-    })
-
-
-def inspo(request):
-    # pull data from 3rd party rest API
-    # posts = Post.objects.all()
-    response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
-    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
-    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
-    # convert reponse data into json
     inspo_data = response.json()
-    # ? change to explore_data['objectIDs'], pass that through, figure that out on front end
-    posts = []
-    idx = 0
-    for post in inspo_data['objectIDs']:
-        print('Checkpoint ', idx)
-        response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
-        inspo = response.json()
-        posts.append(inspo) 
-        idx += 1
-        if idx == 20:
-            break
-    # print(explore['objectIDs'])
+    # ? change to inspo_data['objectIDs'], pass that through, figure that out on front end
+    # posts = []
+    # idx = 0
+    # for post in inspo_data['objectIDs']:
+    #     print('Checkpoint ', idx)
+    #     response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
+    #     inspo = response.json()
+    #     posts.append(inspo) 
+    #     idx += 1
+    #     if idx == 20:
+    #         break
+    # print(inspo['objectIDs'])
     # print(posts)
     print('Checkpoint 2')
-    # return HttpResponse("Explore")
+    # return HttpResponse("Inspiration")
     return render(request, 'qurate/inspiration.html', {
-        'posts': posts,
-        # 'inspiration': inspo['objectIDs'],
+        # 'posts': posts,
+        'inspo': inspo_data['objectIDs'],
         'title': 'Inspiration',
     })
+
+
+# def inspo(request):
+#     # pull data from 3rd party rest API
+#     # posts = Post.objects.all()
+#     response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
+#     # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
+#     # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
+#     # convert reponse data into json
+#     inspo_data = response.json()
+#     # ? change to explore_data['objectIDs'], pass that through, figure that out on front end
+#     posts = []
+#     idx = 0
+#     for post in inspo_data['objectIDs']:
+#         print('Checkpoint ', idx)
+#         response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
+#         inspo = response.json()
+#         posts.append(inspo) 
+#         idx += 1
+#         if idx == 20:
+#             break
+#     # print(explore['objectIDs'])
+#     # print(posts)
+#     print('Checkpoint 2')
+#     # return HttpResponse("Explore")
+#     return render(request, 'qurate/inspiration.html', {
+#         'posts': posts,
+#         # 'inspiration': inspo['objectIDs'],
+#         'title': 'Inspiration',
+#     })
 
 # @login_required
 def posts_detail(request, posts_id):
