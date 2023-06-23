@@ -71,8 +71,32 @@ def explore(request):
 
 
 def inspo(request):
-        return render(request, 'qurate/inspiration.html', {
-            'title': 'Inspiration'
+    # pull data from 3rd party rest API
+    # posts = Post.objects.all()
+    response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
+    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
+    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
+    # convert reponse data into json
+    inspo_data = response.json()
+    # ? change to explore_data['objectIDs'], pass that through, figure that out on front end
+    posts = []
+    idx = 0
+    for post in inspo_data['objectIDs']:
+        print('Checkpoint ', idx)
+        response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
+        inspo = response.json()
+        posts.append(inspo) 
+        idx += 1
+        if idx == 20:
+            break
+    # print(explore['objectIDs'])
+    # print(posts)
+    print('Checkpoint 2')
+    # return HttpResponse("Explore")
+    return render(request, 'qurate/inspiration.html', {
+        'posts': posts,
+        # 'inspiration': inspo['objectIDs'],
+        'title': 'Inspiration',
     })
 
 # @login_required

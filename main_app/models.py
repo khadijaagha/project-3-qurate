@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from datetime import date
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 
 # Create your models here.
@@ -43,7 +44,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        pass 
+        return f'{self.title}'
 
     def get_absolute_url(self):
         return reverse('user_feed')
@@ -70,10 +71,20 @@ class Comment(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    post_likes = models.ManyToManyField(Post, related_name="posts_liked")
-    comment_likes = models.ManyToManyField(Comment, related_name="comments_liked")
-    following_list = models.ManyToManyField('self', through='Follow_List')
-    follower_list = models.ManyToManyField('self')
+    post_likes = models.ManyToManyField(Post, related_name="posts_liked", blank=True)
+    comment_likes = models.ManyToManyField(Comment, related_name="comments_liked", blank=True)
+    following_list = models.ManyToManyField('self', through='Follow_List', blank=True)
+    # ? Follower list might need to be removed down the line, I haven't seen it in any profile examples I've seen
+    follower_list = models.ManyToManyField('self', blank=True)
+    def __str__(self):
+        return f'{self.user} user.id: ({self.user_id}) profile id: ({self.id})'
+
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        user_profile = Profile(user=instance)
+        user_profile.save()
+
+post_save.connect(create_profile, sender=User)
 
 class Follow_List(models.Model):
     following = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
