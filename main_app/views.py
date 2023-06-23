@@ -23,7 +23,7 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
-
+# ! PAGES --------------------------
 # @login_required
 def user_feed(request):
     return render(request, 'qurate/feed.html', {
@@ -70,32 +70,8 @@ def inspo(request):
 
 
 def inspo(request):
-    # pull data from 3rd party rest API
-    # posts = Post.objects.all()
-    response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
-    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
-    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
-    # convert reponse data into json
-    inspo_data = response.json()
-    # ? change to explore_data['objectIDs'], pass that through, figure that out on front end
-    posts = []
-    idx = 0
-    for post in inspo_data['objectIDs']:
-        print('Checkpoint ', idx)
-        response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
-        inspo = response.json()
-        posts.append(inspo) 
-        idx += 1
-        if idx == 20:
-            break
-    # print(explore['objectIDs'])
-    # print(posts)
-    print('Checkpoint 2')
-    # return HttpResponse("Explore")
-    return render(request, 'qurate/inspiration.html', {
-        'posts': posts,
-        # 'inspiration': inspo['objectIDs'],
-        'title': 'Inspiration',
+        return render(request, 'qurate/inspiration.html', {
+            'title': 'Inspiration'
     })
 
 # @login_required
@@ -104,6 +80,8 @@ def posts_detail(request, posts_id):
     return render(request, 'posts/detail.html', {
 
     })
+
+# ! POSTS ------------------
 
 class PostCreate(CreateView):
     model = Post
@@ -138,6 +116,7 @@ class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = '/posts'
 
+# ! COMMENTS ---------------------
 
 def add_comment(request, post_id):
     return render(request, 'posts/add_comment.html', {
@@ -149,6 +128,17 @@ class CommentDelete(LoginRequiredMixin, DeleteView):
     model = Comment
 
 
+# ! TAGS ----------------------
+def tags_index(request, tags):
+    posts = Post.objects.filter(tags=tags)
+    return render(request, 'qurate/tags.html', {
+        'title': '#' + tags,
+        'posts': posts
+    })
+
+
+
+# ! USERS --------------------
 
 def signup(request):
     error_message = ''
@@ -170,15 +160,13 @@ def signup(request):
     return render(request, 'registration/signup.html', context)
 
 @login_required
+#! someone fix plz profile is always  1 behind user
 def users_detail(request, user_id):
-    profile = Profile.objects.get(id=user_id)
-    user_form = UserCreationForm()
+    profile = Profile.objects.get(id=user_id - 1)
+    user_posts = Post.objects.filter(user=user_id)
+    profile1down = profile.user
     return render(request, 'users/detail.html', {
-        'profile': profile, 'user_form': user_form,
+        #! fix this!!!
+        'title': f"{profile.user}'s Pofile",
+        'posts': user_posts
     })
-
-
-# @login_required
-def like_post(request, pk):
-    
-    pass
