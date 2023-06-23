@@ -3,9 +3,13 @@
     {% for post in inspo %}
     
         <container class="post-container">
-                {{post}}
+                <div><a href="https://collectionapi.metmuseum.org/public/collection/v1/objects/{{post}}"></a></div>
             <section class="top-left-post">
-                <div class="user_container">@{{ image }}</div>
+                <script>
+                    const response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/{{post}}').json
+                    
+                </script>
+                <div class="user_container">@{{ response }}</div>
             </section>
             <section class="top-right-post">
                 <div class="price_container">{{ post.price }}</div>
