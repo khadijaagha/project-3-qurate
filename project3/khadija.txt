@@ -5,5 +5,5 @@ Shall we add this to get the details functionality working:
         return reverse('user_feed', 'detail', kwargs={'post_id': seld.id})
 
         
-
+for Delete function - 
 

@@ -4,7 +4,11 @@
 
 {% block content %}
 
-<h1>add post</h1>
+{% if object %}
+    <h1>Edit Post</h1>
+{% else %}
+    <h1>ADD POST</h1>
+{% endif %}
 
 
 <form action="" method="POST">
