@@ -8,15 +8,14 @@
       <div class="card-content">
         <span class="card-title">{{ profile.user }}</span>
         <p>Email: {{ profile.user.email }}</p>
-        <p>Posts: 30</p>
-        <p>Followers: 14.5k</p>
+        <p>Posts: {{ post_count }}</p>
+        <p>Followers: {{ profile.followed_by.count }}</p>
         <form action="{% url 'follow' profile.user.id %}" method="POST">
-            <p>here {{ profile.user.id }}</p>
             {% csrf_token %}
             {% if not is_following %}
                 <button type="submit">Follow</button>
             {% else %}
-                <button type="submit" disabled>Following</button>
+                <button type="submit">Unfollow</button>
             {% endif %}
           </form>
       </div>
