@@ -25,12 +25,12 @@ def about(request):
 # ! PAGES --------------------------
 # @login_required
 def user_feed(request):
-    profile = request.user.profile
-    followers = profile.following_list.all()
-    posts_from_followed = Post.objects.filter(profile__in=followers)
+    following_users = request.user.profile.follows.all()
+    user_posts = Post.objects.filter(user__profile__in=following_users)
+    
     return render(request, 'qurate/feed.html', {
         'title': 'Your Feed',
-        'posts': posts_from_followed
+        'posts': user_posts
     })
 
 def explore(request):
@@ -187,42 +187,34 @@ def signup(request):
     return render(request, 'registration/signup.html', context)
 
 @login_required
-#! someone fix plz profile is always  1 behind user
 def users_detail(request, user_id):
     profile = Profile.objects.get(id=user_id)
-    # print(profile)
     user_posts = Post.objects.filter(user=user_id)
-    # print(user_posts)
-    profile1down = profile.user
+    post_count = Post.objects.filter(user=user_id).count();
     return render(request, 'users/detail.html', {
-        #! fix this!!!
         'profile': profile,
         'title': f"{profile.user}'s Pofile",
-        'posts': user_posts
+        'posts': user_posts,
+        'post_count': post_count
     })
 
 def follow(request, user_id):
-    print('starting follow function')
     profile = Profile.objects.get(id=user_id)
-    print(profile)
     user_posts = Post.objects.filter(user=user_id)
-    print(user_posts)
+    post_count = Post.objects.filter(user=user_id).count();
     is_following = False
-
     if request.method == 'POST':
-        if profile.follower_list.filter(id=request.user.id).exists():
-            profile.follower_list.remove(request.user.profile)
+        if profile.followed_by.filter(id=request.user.id).exists():
+            profile.followed_by.remove(request.user.profile)
             is_following = False
-            print('follower removed')
         else:
-            profile.follower_list.add(request.user.profile)
+            profile.followed_by.add(request.user.profile)
             is_following = True
-            print('follower added')
-
     return render(request, 'users/detail.html', {
         'profile': profile,
         'title': f"{profile.user}'s Profile",
         'posts': user_posts,
-        'is_following': is_following
+        'is_following': is_following,
+        'post_count': post_count
     })
 
