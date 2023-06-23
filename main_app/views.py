@@ -4,6 +4,7 @@ import os
 import requests
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
@@ -26,8 +27,12 @@ def about(request):
 # ! PAGES --------------------------
 # @login_required
 def user_feed(request):
+    profile = request.user.profile
+    followers = profile.following_list.all()
+    posts_from_followed = Post.objects.filter(profile__in=followers)
     return render(request, 'qurate/feed.html', {
-        'title': 'Your Feed'
+        'title': 'Your Feed',
+        'posts': posts_from_followed
     })
 
 def explore(request):
@@ -186,12 +191,40 @@ def signup(request):
 @login_required
 #! someone fix plz profile is always  1 behind user
 def users_detail(request, user_id):
-    profile = Profile.objects.get(id=user_id - 1)
+    profile = Profile.objects.get(id=user_id)
+    # print(profile)
     user_posts = Post.objects.filter(user=user_id)
+    # print(user_posts)
     profile1down = profile.user
     return render(request, 'users/detail.html', {
         #! fix this!!!
+        'profile': profile,
         'title': f"{profile.user}'s Pofile",
         'posts': user_posts
+    })
+
+def follow(request, user_id):
+    print('starting follow function')
+    profile = Profile.objects.get(id=user_id)
+    print(profile)
+    user_posts = Post.objects.filter(user=user_id)
+    print(user_posts)
+    is_following = False
+
+    if request.method == 'POST':
+        if profile.follower_list.filter(id=request.user.id).exists():
+            profile.follower_list.remove(request.user.profile)
+            is_following = False
+            print('follower removed')
+        else:
+            profile.follower_list.add(request.user.profile)
+            is_following = True
+            print('follower added')
+
+    return render(request, 'users/detail.html', {
+        'profile': profile,
+        'title': f"{profile.user}'s Profile",
+        'posts': user_posts,
+        'is_following': is_following
     })
 

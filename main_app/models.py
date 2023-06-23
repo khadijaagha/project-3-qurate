@@ -73,9 +73,12 @@ class Profile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     post_likes = models.ManyToManyField(Post, related_name="posts_liked", blank=True)
     comment_likes = models.ManyToManyField(Comment, related_name="comments_liked", blank=True)
+    # following_list = models.ManyToManyField('self', through='Follow_List', blank=True)
+    # # ? Follower list might need to be removed down the line, I haven't seen it in any profile examples I've seen
+    # follower_list = models.ManyToManyField('self', blank=True)
     following_list = models.ManyToManyField('self', through='Follow_List', blank=True)
-    # ? Follower list might need to be removed down the line, I haven't seen it in any profile examples I've seen
-    follower_list = models.ManyToManyField('self', blank=True)
+    follower_list = models.ManyToManyField('self', symmetrical=False, blank=True)
+
     def __str__(self):
         return f'{self.user} user.id: ({self.user_id}) profile id: ({self.id})'
 

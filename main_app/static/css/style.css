@@ -69,7 +69,10 @@ box-shadow: 0 1px 2px black;
 }
 
 .bottom-left-post {
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .bottom-right-post {
