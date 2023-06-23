@@ -26,21 +26,20 @@ def about(request):
 # ! PAGES --------------------------
 # @login_required
 def user_feed(request):
-
     return render(request, 'qurate/feed.html', {
         'title': 'Your Feed'
     })
 
-# def explore(request):
-#         posts = Post.objects.all()
-#         return render(request, 'qurate/explore.html', {
-#         'posts': posts,
-#         'title': 'Explore'
-#     })
+def explore(request):
+        posts = Post.objects.all()
+        return render(request, 'qurate/explore.html', {
+        'posts': posts,
+        'title': 'Explore'
+    })
 
 # @ratelimit(key = ratelimitkey(user = 'user', rate = '10/s', method = ratelimit.ALL))
 @ratelimit(key = 'ip', rate = '79/s', method = ratelimit.ALL)
-def explore(request):
+def inspo(request):
     # pull data from 3rd party rest API
     # posts = Post.objects.all()
     response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
@@ -63,10 +62,10 @@ def explore(request):
     # print(posts)
     print('Checkpoint 2')
     # return HttpResponse("Explore")
-    return render(request, 'qurate/explore.html', {
+    return render(request, 'qurate/inspiration.html', {
         'posts': posts,
         # 'explore': explore['objectIDs'],
-        'title': 'Explore',
+        'title': 'Inspiration',
     })
 
 
