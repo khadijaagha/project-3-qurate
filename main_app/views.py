@@ -53,7 +53,7 @@ def inspo(request):
     for post in random_posts:
         response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
         inspo = response.json()
-        if inspo == {'message': 'Not a valid object'} or inspo['primaryImage'] == '' or inspo['title'] == 'Worker Shabti of Nauny':
+        if inspo == {'message': 'Not a valid object'} or inspo['primaryImage'] == '' or inspo['title'] == 'Worker Shabti of Nauny' or len(inspo['title']) > 50:
             continue
         posts.append(inspo) 
         idx += 1
