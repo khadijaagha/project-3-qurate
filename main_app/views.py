@@ -227,10 +227,14 @@ def search(request):
     tags = []
     users = []
     if search_content[0] == '#':
-        tags = Post.objects.filter(tags__icontains=search_content)
+        no_hash = search_content.strip('#')
+        tags = Post.objects.filter(tags__icontains=no_hash)
+        print(f'tags {tags}')
     else:
         users = User.objects.filter(username__icontains=search_content)
+        print(f'{users}')
     return render(request, 'qurate/search.html', {
+        'title': f'{search_content} Results',
         'users': users,
-        'tags': tags
+        'tags': tags,
     })
