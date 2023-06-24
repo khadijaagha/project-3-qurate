@@ -4,7 +4,7 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: #69AAB8;
   font-family: sans-serif;
   margin: 0 auto;
 }
@@ -21,6 +21,31 @@ footer.page-footer {
 img {
   margin: 0 auto;
 }
+
+/* ! HOME PAGE ----------------------- */
+
+
+.home-container {
+  display: grid;
+  grid-template-columns: 1fr 25fr 1fr;
+  grid-template-rows: 1fr 20fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  width: 100vw;
+  height: 100vh;
+  }
+  
+  .home-top { grid-area: 1 / 1 / 2 / 4; }
+  .home-main { grid-area: 2 / 2 / 3 / 3; }
+
+  .home-top {
+    border-bottom: 1px solid black;
+  }
+
+  .home-main {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+  }
 
 /* ! INDI POST STYLING --------------- */
 
@@ -93,7 +118,7 @@ box-shadow: 0 1px 2px black;
   grid-row-gap: 0px;
   height: 100vh;
   width: 100vw;
-  background-color: lightblue;
+  background-color: #69AAB8;
   }
   .nav-bar { grid-area: 1 / 1 / 3 / 2; }
   .heading-section { grid-area: 1 / 2 / 3 / 3; }
@@ -183,9 +208,7 @@ box-shadow: 0 1px 2px black;
   -webkit-box-shadow: none;}
 
 
-  body{
-    background-color: pink;
-  }
+
 
 /* !------------- explore page */
 

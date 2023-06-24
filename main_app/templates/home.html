@@ -1,16 +1,24 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <title>Qurate</title>
 </head>
 <body>
-    <h1>Home</h1>
-<ul>
-<li><a href="{% url 'signup' %}">signup</a></li>
-<li><a href="{% url 'login' %}">Log In</a></li>
-</ul>
+    <container class="home-container">
+        <section class="home-top">
+            <ul>
+                <li><a href="{% url 'signup' %}">signup</a></li>
+                <li><a href="{% url 'login' %}">Log In</a></li>
+            </ul>
+        </section>
+        <main class="home-main">
+            <h1>QURATE</h1>
+        </main>
+    </container>
 </body>
 </html>
 
