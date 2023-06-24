@@ -8,12 +8,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponse
+from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, Post, Comment, User
+from .models import Profile, Post, Comment, User, Message, MessageRoom
 from .forms import UserCreationForm
 from django_ratelimit.decorators import ratelimit
 
@@ -204,3 +205,21 @@ def search(request):
         'users': users,
         'tags': tags,
     })
+
+# ! ---------------- MESSAGES ----------------
+class MessageIndex(LoginRequiredMixin):
+    def get(self, request):
+        return render(request, 'messages/index.html')
+
+class Room(LoginRequiredMixin, View):
+    def get(self, request, room_name):
+        room = MessageRoom.objects.filter(name=room_name).first()
+        chats = []
+
+        if room:
+            messages = Message.objects.filter(room=room)
+        else:
+            room = MessageRoom(name=room_name)
+            room.save()
+
+        return render(request, 'messages/room.html', {'room_name': room_name, 'messages': messages})
