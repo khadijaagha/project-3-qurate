@@ -46,3 +46,13 @@ def create_profile(sender, instance, created, **kwargs):
         user_profile.save()
 
 post_save.connect(create_profile, sender=User)
+
+class MessageRoom(models.Model):
+    name = models.CharField(max_length=255)
+
+class Message(models.Model):
+    body = models.CharField(max_length=1000)
+    timestamp = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # ? Might need to remove the quotes around MessageRoom below
+    room = models.ForeignKey('MessageRoom', on_delete=models.CASCADE)
