@@ -3,6 +3,7 @@ import boto3
 import os
 import requests
 import random
+from . import urls
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -27,7 +28,7 @@ def about(request):
 # @login_required
 def user_feed(request):
     following_users = request.user.profile.follows.all()
-    user_posts = Post.objects.filter(user__profile__in=following_users)
+    user_posts = Post.objects.filter(user__profile__in=following_users).order_by('created_at')
     
     return render(request, 'qurate/feed.html', {
         'title': 'Your Feed',
@@ -35,7 +36,7 @@ def user_feed(request):
     })
 
 def explore(request):
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by('created_at')
         return render(request, 'qurate/explore.html', {
         'posts': posts,
         'title': 'Explore'
@@ -134,18 +135,15 @@ def tags_index(request, tags):
 def signup(request):
     error_message = ''
     if request.method == 'POST':
-        # This is how to create a 'user' form object
-        # that includes the data from the browser
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            # This will add the user to the database
             user = form.save()
-            # This is how we log a user in via code
             login(request, user)
+            following_users = request.user.profile.follows.all()
+            user_posts = Post.objects.filter(user__profile__in=following_users).order_by('created_at')
             return redirect('user_feed')
         else:
             error_message = 'Invalid sign up - try again'
-    # A bad POST or a GET request, so render signup.html with an empty form
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
@@ -155,11 +153,16 @@ def users_detail(request, user_id):
     profile = Profile.objects.get(id=user_id)
     user_posts = Post.objects.filter(user=user_id)
     post_count = Post.objects.filter(user=user_id).count();
+    if profile.followed_by.filter(id=request.user.id).exists():
+        is_following = True;
+    else:
+        is_following = False;
     return render(request, 'users/detail.html', {
         'profile': profile,
         'title': f"{profile.user}'s Pofile",
         'posts': user_posts,
-        'post_count': post_count
+        'post_count': post_count,
+        'is_following': is_following
     })
 
 def follow(request, user_id):

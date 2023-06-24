@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-<a href="{% url 'post_create' %}">Add Post</a>
-{% for post in posts %}
+{% for post in posts reversed %}
 <container class="post-container">
     <section class="top-left-post">
-        <div class="user_container">@{{post.user}}</div>
+        <div class="user_container"><a href="{% url 'profile' post.user.profile.id %}">@{{post.user}}</a></div>
     </section>
     <section class="top-right-post">
         <div class="price_container">£{{ post.price }}</div>
