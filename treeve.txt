@@ -21,6 +21,7 @@ class Message(models.Model):
 
 Views Requirements:
 Need
+from .models import Message, MessageRoom
 
 class MessageIndex(LoginRequiredMixin):
     def get(self, request):
