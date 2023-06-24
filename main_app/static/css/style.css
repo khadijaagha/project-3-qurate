@@ -56,7 +56,7 @@ box-shadow: 0 1px 2px black;
   align-items: center;
 }
 
-/* .top-left-post {
+ /* .top-left-post {
 
 }
 
@@ -66,7 +66,7 @@ box-shadow: 0 1px 2px black;
 
 .middle-post {
 
-}
+} */
 
 .bottom-left-post {
   display: flex;
@@ -126,7 +126,7 @@ box-shadow: 0 1px 2px black;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7vh;
+  gap: 5vh;
   border-right: 1px solid black;
   height: 85.8vh;
   margin-top: 0vh;

@@ -29,7 +29,7 @@
     {% for tag in tags %}
         <container class="post-container">
             <section class="top-left-post">
-                <div class="user_container">@{{tag.user}}</div>
+                <div class="user_container"><a href="{% url 'profile' tag.user.profile.id %}">@{{tag.user}}</a></div>
             </section>
             <section class="top-right-post">
                 <div class="price_container">{{ tag.price }}</div>
