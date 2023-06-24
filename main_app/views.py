@@ -2,6 +2,7 @@ import uuid
 import boto3
 import os
 import requests
+import random
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -43,63 +44,25 @@ def explore(request):
 # @ratelimit(key = ratelimitkey(user = 'user', rate = '10/s', method = ratelimit.ALL))
 @ratelimit(key = 'ip', rate = '79/s', method = ratelimit.ALL)
 def inspo(request):
-    # pull data from 3rd party rest API
-    # posts = Post.objects.all()
     response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
-    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
-    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
-    # convert reponse data into json
     inspo_data = response.json()
-    # ? change to inspo_data['objectIDs'], pass that through, figure that out on front end
-    # posts = []
-    # idx = 0
-    # for post in inspo_data['objectIDs']:
-    #     print('Checkpoint ', idx)
-    #     response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
-    #     inspo = response.json()
-    #     posts.append(inspo) 
-    #     idx += 1
-    #     if idx == 20:
-    #         break
-    # print(inspo['objectIDs'])
-    # print(posts)
-    print('Checkpoint 2')
-    # return HttpResponse("Inspiration")
+    posts = []
+    random_posts = inspo_data['objectIDs']
+    random.shuffle(random_posts)
+    idx = 0
+    for post in random_posts:
+        response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
+        inspo = response.json()
+        if inspo == {'message': 'Not a valid object'} or inspo['primaryImage'] == '' or inspo['title'] == 'Worker Shabti of Nauny' or len(inspo['title']) > 50:
+            continue
+        posts.append(inspo) 
+        idx += 1
+        if idx == 6:
+            break
     return render(request, 'qurate/inspiration.html', {
-        # 'posts': posts,
-        'inspo': inspo_data['objectIDs'],
+        'inspo': posts,
         'title': 'Inspiration',
     })
-
-
-# def inspo(request):
-#     # pull data from 3rd party rest API
-#     # posts = Post.objects.all()
-#     response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
-#     # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
-#     # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
-#     # convert reponse data into json
-#     inspo_data = response.json()
-#     # ? change to explore_data['objectIDs'], pass that through, figure that out on front end
-#     posts = []
-#     idx = 0
-#     for post in inspo_data['objectIDs']:
-#         print('Checkpoint ', idx)
-#         response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
-#         inspo = response.json()
-#         posts.append(inspo) 
-#         idx += 1
-#         if idx == 20:
-#             break
-#     # print(explore['objectIDs'])
-#     # print(posts)
-#     print('Checkpoint 2')
-#     # return HttpResponse("Explore")
-#     return render(request, 'qurate/inspiration.html', {
-#         'posts': posts,
-#         # 'inspiration': inspo['objectIDs'],
-#         'title': 'Inspiration',
-#     })
 
 # @login_required
 def posts_detail(request, posts_id):
