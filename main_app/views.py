@@ -272,9 +272,14 @@ def search(request):
 
 # * Messages was all removed, so definitely keeping it
 # ! ---------------- MESSAGES ----------------
-class MessageIndex(LoginRequiredMixin):
-    def get(self, request):
-        return render(request, 'messages/index.html')
+def MessageIndex(request):
+
+    return render(request, 'messages/index.html', {
+        
+    })
+
+def send_message(request):
+    pass
 
 class Room(LoginRequiredMixin, View):
     def get(self, request, room_name):

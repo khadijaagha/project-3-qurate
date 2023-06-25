@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1> messages </h1>
+
+<form method="post" action="{% url 'send_message' user.profile.id %}">
+    {% csrf_token %}
+    <textarea name="message_body" placeholder="Enter your message"></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+
+{% endblock %}
+

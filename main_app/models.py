@@ -56,16 +56,16 @@ post_save.connect(create_profile, sender=User)
 
 class MessageRoom(models.Model):
     name = models.CharField(max_length=255)
+    participants = models.ManyToManyField(User, related_name='message_room')
 
     def __str__(self):
         return f'{self.name}'
 
 class Message(models.Model):
     body = models.CharField(max_length=1000)
-    timestamp = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # ? Might need to remove the quotes around MessageRoom below
-    room = models.ForeignKey('MessageRoom', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(MessageRoom, on_delete=models.CASCADE, related_name='messages')
 
     def __str__(self):
         return f'{self.user.username} - "{self.body}" - {self.timestamp} - {self.room}'

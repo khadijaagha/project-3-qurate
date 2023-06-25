@@ -27,8 +27,9 @@ urlpatterns = [
     path('profile/<int:user_id>/', views.users_detail, name='profile'),
     path('profile/<int:user_id>/follow/', views.follow, name='follow'),
     #! -------------- TAG ROUTES
-    path('qurate/<str:tags>/', views.tags_index, name='tags')
+    path('qurate/<str:tags>/', views.tags_index, name='tags'),
     #! -------------- MESSAGE ROUTES --------------
     # ? idk if this routing is correct
-    # ? path('messages/', views.MessageIndex.as_view(), name='messages')
+    path('messages/', views.MessageIndex, name='messages'),
+    path('message/', views.send_message, name='message_user'),
 ]

@@ -72,7 +72,6 @@ background: grey;
 width: 25vw;
 height: 45vh;
 box-shadow: 0 1px 2px black;
-border: 1px solid red;
 }
 
 .top-left-post { grid-area: 1 / 1 / 2 / 2; }
@@ -149,9 +148,9 @@ border: 1px solid red;
   flex-wrap: wrap;
 }
 
-.profile-icon {
-  height: 3vh;
-  width: 1.5vw;
+.msg-icon {
+  height: 5vh;
+  width: 3vw;
   margin: 0 auto;
 }
 
