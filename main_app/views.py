@@ -116,7 +116,6 @@ class PostCreate(CreateView):
 
 
 
-
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
     fields = ['title', 'price', 'description', 'tags']
@@ -126,6 +125,16 @@ class PostDelete(LoginRequiredMixin, DeleteView):
     # if request.method == 'POST':
     # *  success_url = '/qurate'
     success_url = reverse_lazy('user_feed')
+
+
+def delete_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.method == "POST":
+        post.delete()
+        print("Post deleted 🗑️")
+    return redirect('detail', )
+
+
 
 @login_required
 def like_post(request, pk):

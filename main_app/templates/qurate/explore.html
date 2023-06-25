@@ -28,7 +28,7 @@
             <div class="likes_container">{{ post.likes }}</div>
             <form action="{% url 'post_update' post.id %}" method="GET">
                 <button>Edit</button>
-            <form action="{% url 'post_delete' post.id %}" method="GET">
+            <form action="{% url 'delete_post' post.id %}" method="POST">
                 <button>Delete</button>
             </form>
             <a href="{% url 'tags' tags=post.tags %}"><p>#{{ post.tags }}</p></a>
