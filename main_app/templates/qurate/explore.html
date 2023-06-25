@@ -2,6 +2,15 @@
 {% block content %}
     {% for post in posts reversed %}
     <container class="post-container">
+        <a href="{% url 'detail' post.id %}">
+            <section class="top-left-post">
+                <div class="user_container"><a href="{% url 'profile' post.user.profile.id %}">@{{post.user}}</a></div>
+                    <form action="{% url 'like_post' post.id %}" method="POST">
+                        {% csrf_token %}
+                        <button><div class="like-button">
+                        </form>
+                        <img src="https://www.pngall.com/wp-content/uploads/5/Like-Button-PNG-Image-File.png" alt=""></button> 
+                </div>
         <section class="top-left-post">
             <div class="user_container"><a href="{% url 'profile' post.user.profile.id %}">@{{post.user}}</a></div>
         </section>
