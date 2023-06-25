@@ -15,7 +15,8 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, Post, Comment, User, Message, MessageRoom, Like
+# from .models import Profile, Post, Comment, User, Message, MessageRoom, Like
+from .models import *
 from .forms import UserCreationForm
 from django_ratelimit.decorators import ratelimit
 
@@ -42,12 +43,20 @@ def user_feed(request):
 def explore(request):
         posts = Post.objects.all().order_by('created_at')
         profiles = Profile.objects.all()
-        # ? We probably don't want the below change
-        # post_likes = Profile.post_likes.objects.all()
+        
+        # post_likes = profiles.posts_liked.all()
+        # print(post_likes)
+
+        # for profile in profiles:
+        #     # post_likes = profile.post_likes.get(post_id=post).count()
+        #     post_likes = profile.post_likes.all()
+        # print()
+
         for post in posts:
-            likes = profiles.post_likes.filter(post_id=post).count()
+            likes = profiles.post_likes.get(post_id=post).count()
             post.likes = likes
             post.save()
+
         return render(request, 'qurate/explore.html', {
         'posts': posts,
         'title': 'Explore'
