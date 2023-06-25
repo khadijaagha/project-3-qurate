@@ -7,6 +7,7 @@ from . import urls
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -14,7 +15,7 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, Post, Comment, User, Message, MessageRoom
+from .models import Profile, Post, Comment, User, Message, MessageRoom, Like
 from .forms import UserCreationForm
 from django_ratelimit.decorators import ratelimit
 
@@ -30,6 +31,8 @@ def about(request):
 def user_feed(request):
     following_users = request.user.profile.follows.all()
     user_posts = Post.objects.filter(user__profile__in=following_users).order_by('created_at')
+    # ? We probably don't want the below change
+    # ? user_posts = Post.objects.filter(user__profile__in=following_users)
     
     return render(request, 'qurate/feed.html', {
         'title': 'Your Feed',
@@ -38,6 +41,8 @@ def user_feed(request):
 
 def explore(request):
         posts = Post.objects.all().order_by('created_at')
+        # ? We probably don't want the below change
+        # ? posts = Post.objects.all()
         return render(request, 'qurate/explore.html', {
         'posts': posts,
         'title': 'Explore'
@@ -67,10 +72,22 @@ def inspo(request):
     })
 
 # @login_required
-def posts_detail(request, posts_id):
+# ? def posts_detail(request, posts_id):
+# ?     return render(request, 'posts/detail.html', {
+# ?     })
 
+def posts_detail(request, pk):
+    post = Post.objects.get(id=pk)
+    comments = Comment.objects.filter(post=post)
+
+    if request.method == 'POST':
+        comment_body = request.POST.get('comment-body')
+        comment = Comment.objects.create(body=comment_body, user=request.user, post=post)
     return render(request, 'posts/detail.html', {
 
+        #context variable
+    'post': post,
+    'comments': comments   
     })
 
 # ! POSTS ------------------
@@ -107,7 +124,22 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     # if request.method == 'POST':
-    success_url = '/qurate'
+    # *  success_url = '/qurate'
+    success_url = reverse_lazy('user_feed')
+
+@login_required
+def like_post(request, pk):
+    post = Post.objects.get(id=pk)
+
+    if not post.likes.filter(user=request.user).exists():
+
+        like = Like.objects.create(user = request.user)
+        post.likes.add(like)
+        post.save() 
+        print("Like button clicked 👍", pk)
+
+    return redirect('explore')
+
 
 # ! COMMENTS ---------------------
 
@@ -116,9 +148,27 @@ def add_comment(request, post_id):
 
     })
 
+@login_required
+def like_comment(request, post_id, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    if not comment.likes.filter(user=request.user).exists():    
+        if request.method == 'POST':
+            like = Like.objects.create(user=request.user)
+            comment.likes.add(like)
+            comment.save()
+            print("Liked")
+    return redirect('detail', post_id)
 
 class CommentDelete(LoginRequiredMixin, DeleteView):
     model = Comment
+
+@login_required
+def delete_comment(request, comment_id, post_id ):
+
+    if request.method == 'POST':
+        comment = Comment.objects.get(user=request.user, id=comment_id)
+        comment.delete()
+    return redirect('detail', post_id)
 
 
 # ! TAGS ----------------------
@@ -136,15 +186,22 @@ def tags_index(request, tags):
 def signup(request):
     error_message = ''
     if request.method == 'POST':
+        # This is how to create a 'user' form object
+        # that includes the data from the browser
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            # This will add the user to the database
             user = form.save()
+            # This is how we log a user in via code
             login(request, user)
+            # ! These two lines below have been removed, why?
             following_users = request.user.profile.follows.all()
             user_posts = Post.objects.filter(user__profile__in=following_users).order_by('created_at')
+            # !
             return redirect('user_feed')
         else:
             error_message = 'Invalid sign up - try again'
+    # A bad POST or a GET request, so render signup.html with an empty form
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
@@ -154,16 +211,20 @@ def users_detail(request, user_id):
     profile = Profile.objects.get(id=user_id)
     user_posts = Post.objects.filter(user=user_id)
     post_count = Post.objects.filter(user=user_id).count();
+    # ! This if else statement should probably be kept, right?
     if profile.followed_by.filter(id=request.user.id).exists():
         is_following = True;
     else:
         is_following = False;
+    # !
     return render(request, 'users/detail.html', {
         'profile': profile,
         'title': f"{profile.user}'s Pofile",
         'posts': user_posts,
+        # ! These two lines below should also probably be kept, right?
         'post_count': post_count,
         'is_following': is_following
+        # !
     })
 
 def follow(request, user_id):
@@ -194,18 +255,22 @@ def search(request):
     tags = []
     users = []
     if search_content[0] == '#':
+        # ! These 3 lines below have been removed and instead there is \/
         no_hash = search_content.strip('#')
         tags = Post.objects.filter(tags__icontains=no_hash)
         print(f'tags {tags}')
+        # ! This is what is here instead 
+        # ? tags = Post.objects.filter(tags__icontains=search_content)
     else:
         users = User.objects.filter(username__icontains=search_content)
-        print(f'{users}')
+        print(f'{users}') # ! This has been removed for some reason
     return render(request, 'qurate/search.html', {
-        'title': f'{search_content} Results',
+        'title': f'{search_content} Results', # ! This has been removed for some reason
         'users': users,
         'tags': tags,
     })
 
+# * Messages was all removed, so definitely keeping it
 # ! ---------------- MESSAGES ----------------
 class MessageIndex(LoginRequiredMixin):
     def get(self, request):
