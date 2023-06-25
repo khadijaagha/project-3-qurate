@@ -7,5 +7,9 @@
 
     <input type="text">
     <input type="submit" value="Submit!" class="btn">
-
+    <form action="{% url 'like_post' post.id %}" method="POST">
+        {% csrf_token %}
+        <button><div class="like-button">
+        <img src="https://www.pngall.com/wp-content/uploads/5/Like-Button-PNG-Image-File.png" alt=""></button>   
+    </form>
 </form>
