@@ -14,8 +14,8 @@
     <container class="content-container">
       <section class="nav-bar">
         <section class="profile-card">
-          <a href="{% url 'profile' user_id=user.id %}"><img class="profile-icon" src="https://thenounproject.com/api/private/icons/3764854/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a>
-          <p>{{ user }}</p>
+          <a href="{% url 'profile' user_id=user.id %}"><p>{{ user }}</p></a>
+          <a href="{% url 'messages' %}"><img class="msg-icon" title="Messages" src="https://thenounproject.com/api/private/icons/1019589/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"></a>
           <p>Followers: {{ user.profile.followed_by.count }}</p>
           <p>Posts: {{ request.user.profile.user.post_set.count }}</p>
         </section>
