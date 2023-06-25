@@ -4,11 +4,6 @@ Shall we add this to get the details functionality working:
     def get_absolute_url(self):
         return reverse('user_feed', 'detail', kwargs={'post_id': seld.id})
 
-a model for  likes:
-class Like(models.Model):
-    user = models.ForeignKey(User)
-    post = models.ForeignKey(Post)
-    created = models.DateTimeField(auto_now_add=True)        
-
+        
 for Delete function - 
 

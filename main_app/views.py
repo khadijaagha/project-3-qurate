@@ -2,17 +2,19 @@ import uuid
 import boto3
 import os
 import requests
+import random
+from . import urls
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.urls import reverse_lazy
 from django.http import HttpResponse
+from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, Post, Comment, User, Like
+from .models import Profile, Post, Comment, User, Message, MessageRoom
 from .forms import UserCreationForm
 from django_ratelimit.decorators import ratelimit
 
@@ -27,7 +29,7 @@ def about(request):
 # @login_required
 def user_feed(request):
     following_users = request.user.profile.follows.all()
-    user_posts = Post.objects.filter(user__profile__in=following_users)
+    user_posts = Post.objects.filter(user__profile__in=following_users).order_by('created_at')
     
     return render(request, 'qurate/feed.html', {
         'title': 'Your Feed',
@@ -35,7 +37,7 @@ def user_feed(request):
     })
 
 def explore(request):
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by('created_at')
         return render(request, 'qurate/explore.html', {
         'posts': posts,
         'title': 'Explore'
@@ -44,76 +46,31 @@ def explore(request):
 # @ratelimit(key = ratelimitkey(user = 'user', rate = '10/s', method = ratelimit.ALL))
 @ratelimit(key = 'ip', rate = '79/s', method = ratelimit.ALL)
 def inspo(request):
-    # pull data from 3rd party rest API
-    # posts = Post.objects.all()
     response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
-    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
-    # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
-    # convert reponse data into json
     inspo_data = response.json()
-    # ? change to inspo_data['objectIDs'], pass that through, figure that out on front end
-    # posts = []
-    # idx = 0
-    # for post in inspo_data['objectIDs']:
-    #     print('Checkpoint ', idx)
-    #     response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
-    #     inspo = response.json()
-    #     posts.append(inspo) 
-    #     idx += 1
-    #     if idx == 20:
-    #         break
-    # print(inspo['objectIDs'])
-    # print(posts)
-    print('Checkpoint 2')
-    # return HttpResponse("Inspiration")
+    posts = []
+    random_posts = inspo_data['objectIDs']
+    random.shuffle(random_posts)
+    idx = 0
+    for post in random_posts:
+        response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
+        inspo = response.json()
+        if inspo == {'message': 'Not a valid object'} or inspo['primaryImage'] == '' or inspo['title'] == 'Worker Shabti of Nauny' or len(inspo['title']) > 50:
+            continue
+        posts.append(inspo) 
+        idx += 1
+        if idx == 6:
+            break
     return render(request, 'qurate/inspiration.html', {
-        # 'posts': posts,
-        'inspo': inspo_data['objectIDs'],
+        'inspo': posts,
         'title': 'Inspiration',
     })
 
-
-# def inspo(request):
-#     # pull data from 3rd party rest API
-#     # posts = Post.objects.all()
-#     response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
-#     # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/objectIDs')
-#     # response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/49187')
-#     # convert reponse data into json
-#     inspo_data = response.json()
-#     # ? change to explore_data['objectIDs'], pass that through, figure that out on front end
-#     posts = []
-#     idx = 0
-#     for post in inspo_data['objectIDs']:
-#         print('Checkpoint ', idx)
-#         response = requests.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{post}')
-#         inspo = response.json()
-#         posts.append(inspo) 
-#         idx += 1
-#         if idx == 20:
-#             break
-#     # print(explore['objectIDs'])
-#     # print(posts)
-#     print('Checkpoint 2')
-#     # return HttpResponse("Explore")
-#     return render(request, 'qurate/inspiration.html', {
-#         'posts': posts,
-#         # 'inspiration': inspo['objectIDs'],
-#         'title': 'Inspiration',
-#     })
-
 # @login_required
-def posts_detail(request, pk):
-    post = Post.objects.get(id=pk)
-    comments = Comment.objects.filter(post=post)
+def posts_detail(request, posts_id):
 
-    if request.method == 'POST':
-        comment_body = request.POST.get('comment-body')
-        comment = Comment.objects.create(body=comment_body, user=request.user, post=post)
     return render(request, 'posts/detail.html', {
-        #context variable
-    'post': post,
-    'comments': comments   
+
     })
 
 # ! POSTS ------------------
@@ -142,6 +99,7 @@ class PostCreate(CreateView):
 
 
 
+
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
     fields = ['title', 'price', 'description', 'tags']
@@ -149,50 +107,18 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     # if request.method == 'POST':
-    success_url = reverse_lazy('user_feed')
-
-@login_required
-def like_post(request, pk):
-    post = Post.objects.get(id=pk)
-          
-    if not post.likes.filter(user=request.user).exists():
-        
-        like = Like.objects.create(user = request.user)
-        post.likes.add(like)
-        post.save() 
-        print("Like button clicked 👍", pk)
-
-    return redirect('explore')
+    success_url = '/qurate'
 
 # ! COMMENTS ---------------------
 
 def add_comment(request, post_id):
     return render(request, 'posts/add_comment.html', {
 
-})
-
-@login_required
-def like_comment(request, post_id, comment_id):
-    comment = Comment.objects.get(id=comment_id)
-    if not comment.likes.filter(user=request.user).exists():    
-        if request.method == 'POST':
-            like = Like.objects.create(user=request.user)
-            comment.likes.add(like)
-            comment.save()
-            print("Liked")
-    return redirect('detail', post_id)
+    })
 
 
 class CommentDelete(LoginRequiredMixin, DeleteView):
     model = Comment
-
-@login_required
-def delete_comment(request, comment_id, post_id ):
-    
-    if request.method == 'POST':
-        comment = Comment.objects.get(user=request.user, id=comment_id)
-        comment.delete()
-    return redirect('detail', post_id)
 
 
 # ! TAGS ----------------------
@@ -210,18 +136,15 @@ def tags_index(request, tags):
 def signup(request):
     error_message = ''
     if request.method == 'POST':
-        # This is how to create a 'user' form object
-        # that includes the data from the browser
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            # This will add the user to the database
             user = form.save()
-            # This is how we log a user in via code
             login(request, user)
+            following_users = request.user.profile.follows.all()
+            user_posts = Post.objects.filter(user__profile__in=following_users).order_by('created_at')
             return redirect('user_feed')
         else:
             error_message = 'Invalid sign up - try again'
-    # A bad POST or a GET request, so render signup.html with an empty form
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
@@ -231,11 +154,16 @@ def users_detail(request, user_id):
     profile = Profile.objects.get(id=user_id)
     user_posts = Post.objects.filter(user=user_id)
     post_count = Post.objects.filter(user=user_id).count();
+    if profile.followed_by.filter(id=request.user.id).exists():
+        is_following = True;
+    else:
+        is_following = False;
     return render(request, 'users/detail.html', {
         'profile': profile,
         'title': f"{profile.user}'s Pofile",
         'posts': user_posts,
-        'post_count': post_count
+        'post_count': post_count,
+        'is_following': is_following
     })
 
 def follow(request, user_id):
@@ -266,10 +194,32 @@ def search(request):
     tags = []
     users = []
     if search_content[0] == '#':
-        tags = Post.objects.filter(tags__icontains=search_content)
+        no_hash = search_content.strip('#')
+        tags = Post.objects.filter(tags__icontains=no_hash)
+        print(f'tags {tags}')
     else:
         users = User.objects.filter(username__icontains=search_content)
+        print(f'{users}')
     return render(request, 'qurate/search.html', {
+        'title': f'{search_content} Results',
         'users': users,
-        'tags': tags
+        'tags': tags,
     })
+
+# ! ---------------- MESSAGES ----------------
+class MessageIndex(LoginRequiredMixin):
+    def get(self, request):
+        return render(request, 'messages/index.html')
+
+class Room(LoginRequiredMixin, View):
+    def get(self, request, room_name):
+        room = MessageRoom.objects.filter(name=room_name).first()
+        chats = []
+
+        if room:
+            messages = Message.objects.filter(room=room)
+        else:
+            room = MessageRoom(name=room_name)
+            room.save()
+
+        return render(request, 'messages/room.html', {'room_name': room_name, 'messages': messages})

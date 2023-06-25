@@ -5,13 +5,6 @@ from django.db.models.signals import post_save
 
 # Create your models here.
 
-class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)   
-
-
-
 class Post(models.Model):
     url = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -19,7 +12,7 @@ class Post(models.Model):
     price = models.IntegerField(blank=True)
     description = models.CharField(max_length=300, blank=True)
     tags = models.CharField(max_length=30, blank=True)
-    likes = models.ManyToManyField(Like, blank=True)
+    likes = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -34,10 +27,9 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
     body = models.TextField(max_length=500)
-    likes = models.ManyToManyField(Like, blank=True)
+    likes = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

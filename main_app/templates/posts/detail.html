@@ -1,44 +1,12 @@
 <p>post details</p>
 
-<p><img src={{ post.url }} ></p>
-<p>{{ post.title }}</p>
-<p>{{ post.price }}</p>
-<p>{{ post.description }}</p>
-<p>{{ post.tags }}</p>
-<p>{{ post.likes.count }}</p>
 
-<a href="{% url 'post_update' post.id %}">Edit</a>
-<a href="{% url 'post_delete' post.id %}">Delete</a>
+<a href="{% url 'posts_update' post.id %}">Edit</a>
+<a href="{% url 'posts_delete' post.id %}">Delete</a>
 
 
 <h2>Comments</h2>
-{% for comment in comments %}
-{{ comment.body }}
-{{comment.user.username}}
-<form action="{% url 'like_comment' post.id comment.id %}" method="POST">
-    {% csrf_token %}
-    <button>Like
-        {{ comment.likes.count }} likes
-    </button>
-</form>
-{% if comment.user == request.user %}
-<form action="{% url 'delete_comment' post.id comment.id %}" method="POST">
-    {% csrf_token %}
-    <button>Delete</button>
-</form>
-{% endif %}
-{% endfor %}
 
 
-
-<form action="" method="POST">
-    {% csrf_token %}
-  <textarea name="comment-body" id="" cols="30" rows="10">
-
-  </textarea>  
-  <br>
-  <button type="submit">Add Comment</button>
-
-</form>
-<a href="{% url 'add_comment' post.id %}">Add Comment</a>
+<a href="{% url 'add_comment' post.id %}">Edit</a>
 

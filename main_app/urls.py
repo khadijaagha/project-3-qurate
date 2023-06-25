@@ -9,17 +9,15 @@ urlpatterns = [
     path('explore/', views.explore, name='explore'),
     path('qurate/inspiration/', views.inspo, name='inspo'),
     #!----POST ROUTES-----
-    path('posts/<int:pk>/', views.posts_detail, name='detail'),
+    path('posts/<int:post_id>/', views.posts_detail, name='detail'),
     path('posts/create/', views.PostCreate.as_view(), name='post_create'),
     path('posts/<int:pk>/update/', views.PostUpdate.as_view(), name='post_update'),
     path('posts/<int:pk>/delete/', views.PostDelete.as_view(), name='post_delete'),
-    path('posts/<int:pk>/like/', views.like_post, name='like_post'),
     # ! --------- SEARCH URL
     path('qurate/search/', views.search, name='search'),
     #!----COMMENT ROUTES-----
     path('posts/<int:post_id>/add_comment/', views.add_comment, name='add_comment'),
-    path('posts/<int:post_id>/comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
-    path('posts/<int:post_id>/comment/<int:comment_id>/like/', views.like_comment, name='like_comment'),
+    path('posts/<int:pk>/comment/<int:fk>/delete/', views.CommentDelete.as_view(), name='comment_delete'),
     #!------------ USER ROUTES 
     path('accounts/signup/', views.signup, name='signup'),
     path('profile/<int:user_id>/', views.users_detail, name='profile'),
