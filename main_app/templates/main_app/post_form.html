@@ -4,16 +4,17 @@
 
 
 <!-- Leaving the action empty makes the form post to the same url used to display it -->
-<form action="" method="POST" enctype="multipart/form-data">
+<form action="" method="POST" enctype="multipart/form-data" class="reg-form">
   <input type="file" name="photo-file">
 
   <!-- Django requires the following for security purposes -->
   {% csrf_token %}
-  <table>
+  <table class="reg-fields">
     <!-- Render the inputs inside of <tr>s & <td>s -->
     {{ form.as_table }}
   </table>
-  <input type="submit" value="Submit!" class="btn">
+  <input type="hidden" class="reg-fields" name="next" value="{{ next }}">
+  <button type="submit" class="btn">Submit!</button>
 </form>
 
 {% endblock %}
