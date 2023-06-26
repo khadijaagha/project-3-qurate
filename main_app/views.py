@@ -100,7 +100,20 @@ def posts_detail(request, pk):
     post = Post.objects.get(id=pk)
     comments = Comment.objects.filter(post=post)
     profile = Profile.objects.get(user=request.user.id)
-
+    likes = Profile.objects.filter(post_likes=post).count()
+        # print(post)
+    post.likes = likes
+    post.save()
+    if profile.post_likes.filter(id=post.id).exists():
+        # print(post.title, post.id, "liked by user")
+        post.user_liked = True
+        post.save()
+        # print(type(post.user_liked))
+    elif not profile.post_likes.filter(id=post.id).exists():
+        # print(post.title, post.id, "NOT liked")
+        post.user_liked = False
+        post.save()
+        # print(type(post.user_liked))
     if request.method == 'POST':
         comment_body = request.POST.get('comment-body')
         comment = Comment.objects.create(body=comment_body, user=request.user, post=post)
