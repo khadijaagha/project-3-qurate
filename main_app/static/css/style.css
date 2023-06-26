@@ -352,6 +352,48 @@ box-shadow: 0 1px 2px black;
   justify-content: space-between;
 }
 
+/* !  POST DETAILS PAGE ----- */
+.post-image{
+  display: block;
+  margin: auto;
+  max-width: 100%;
+}
+
+.detail-container{
+display: flexbox;
+
+
+
+}
+
+.detail-heading{
+  font-size: 100px;
+  font-weight: bold;
+
+}
+
+
+.post-container{
+
+}
+
+
+.detail-btns{
+
+}
+
+
+.comments-containers{
+font-family: 'Poppins', sans-serif;
+font-weight: 300;
+}
+
+
+.add-comment{
+  font-family: 'Open Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
 
 
 
