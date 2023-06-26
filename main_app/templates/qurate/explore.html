@@ -41,6 +41,7 @@
                 {% endif %}
                 <!-- <img src="https://www.pngall.com/wp-content/uploads/5/Like-Button-PNG-Image-File.png" alt=""></button>  -->
             </div>
+            {% if request.user == post.user %}
             <form action="{% url 'post_update' post.id %}" method="GET">
                 {% csrf_token %}
                 <button>Edit</button>
@@ -49,6 +50,7 @@
                 {% csrf_token %}
                 <button>Delete</button>
             </form>
+            {% endif %}
             <a href="{% url 'tags' tags=post.tags %}"><p>#{{ post.tags }}</p></a>
         </section>
     </a>

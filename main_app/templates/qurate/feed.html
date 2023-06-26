@@ -12,7 +12,9 @@
         <div class="img-container"><img class="post-img" src="{{ post.url }}">  </div>
     </section>
     <section class="bottom-left-post">
+        <a href="{% url 'detail' post.id %}">
         <div class="title">{{post.title}}</div>
+        </a>
         <div class="description_container">{{ post.description }}</div>
     </section>
     <section class="bottom-right-post">
