@@ -41,26 +41,32 @@ def user_feed(request):
     })
 
 def explore(request):
+        # profiles = Profile.objects.all()
         posts = Post.objects.all().order_by('created_at')
-        profiles = Profile.objects.all()
-        
-        # post_likes = profiles.posts_liked.all()
-        # print(post_likes)
+        profile = Profile.objects.get(user=request.user.id)
 
-        # for profile in profiles:
-        #     # post_likes = profile.post_likes.get(post_id=post).count()
-        #     post_likes = profile.post_likes.all()
-        # print()
+        for post in posts:
+            likes = Profile.objects.filter(post_likes=post).count()
+            # print(post)
+            post.likes = likes
+            post.save()
+            if profile.post_likes.filter(id=post.id).exists():
+                print(post.title, post.id, "liked by user")
+                post.user_liked = True
+                post.save()
+                print(type(post.user_liked))
+            elif not profile.post_likes.filter(id=post.id).exists():
+                print(post.title, post.id, "NOT liked")
+                post.user_liked = False
+                post.save()
+                print(type(post.user_liked))
 
-        # for post in posts:
-        #     likes = profiles.post_likes.get(post_id=post).count()
-        #     post.likes = likes
-        #     post.save()
 
         return render(request, 'qurate/explore.html', {
-        'posts': posts,
-        'title': 'Explore'
-    })
+            'posts': posts,
+            # 'profile': profiles,
+            'title': 'Explore'
+        })
 
 # @ratelimit(key = ratelimitkey(user = 'user', rate = '10/s', method = ratelimit.ALL))
 @ratelimit(key = 'ip', rate = '79/s', method = ratelimit.ALL)
@@ -93,15 +99,22 @@ def inspo(request):
 def posts_detail(request, pk):
     post = Post.objects.get(id=pk)
     comments = Comment.objects.filter(post=post)
+    profile = Profile.objects.get(user=request.user.id)
 
     if request.method == 'POST':
         comment_body = request.POST.get('comment-body')
         comment = Comment.objects.create(body=comment_body, user=request.user, post=post)
-    return render(request, 'posts/detail.html', {
 
+    for comment in comments:
+        likes = Profile.objects.filter(comment_likes=comment).count()
+        # print(comment.id)
+        comment.likes = likes
+        comment.save()
+
+    return render(request, 'posts/detail.html', {
         #context variable
-    'post': post,
-    'comments': comments   
+        'post': post,
+        'comments': comments   
     })
 
 # ! POSTS ------------------
@@ -130,7 +143,6 @@ class PostCreate(CreateView):
 
 
 
-
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
     fields = ['title', 'price', 'description', 'tags']
@@ -140,6 +152,22 @@ class PostDelete(LoginRequiredMixin, DeleteView):
     # if request.method == 'POST':
     # *  success_url = '/qurate'
     success_url = reverse_lazy('user_feed')
+
+
+def delete_post(request, post_id):
+    
+    if request.method == "POST":
+        post = Post.objects.get(id=post_id)
+        post.delete()
+        print("Post deleted 🗑️")
+        posts = Post.objects.all().order_by('created_at')        
+
+    return render(request, 'qurate/explore.html', {
+        'posts': posts,
+        'title': 'Explore'
+    })
+
+
 
 @login_required
 def like_post(request, pk):

@@ -12,12 +12,19 @@
         <div class="img-container"><img class="post-img" src="{{ post.url }}">  </div>
     </section>
     <section class="bottom-left-post">
+        <a href="{% url 'detail' post.id %}">
         <div class="title">{{post.title}}</div>
+        </a>
         <div class="description_container">{{ post.description }}</div>
     </section>
     <section class="bottom-right-post">
         <div class="likes_container">{{ post.likes }}</div>
         <a href="{% url 'tags' tags=post.tags %}"><p>#{{ post.tags }}</p></a>
+        <form action="{% url 'like_post' post.id %}" method="POST">
+            {% csrf_token %}
+            <button><div class="like-button">
+        </form>
+        <img src="https://www.pngall.com/wp-content/uploads/5/Like-Button-PNG-Image-File.png" alt=""></button> 
     </section>
 </container> 
 {% endfor %}

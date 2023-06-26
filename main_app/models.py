@@ -33,8 +33,8 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
     body = models.TextField(max_length=500)
-    # ! likes = models.IntegerField(default=0)
-    likes = models.ManyToManyField(Like, blank=True)
+    likes = models.IntegerField(default=0)
+    # likes = models.ManyToManyField(Like, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
