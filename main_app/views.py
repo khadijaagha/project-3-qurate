@@ -114,7 +114,8 @@ def posts_detail(request, pk):
     return render(request, 'posts/detail.html', {
         #context variable
         'post': post,
-        'comments': comments   
+        'comments': comments,
+        'title': 'Post Details',   
     })
 
 # ! POSTS ------------------

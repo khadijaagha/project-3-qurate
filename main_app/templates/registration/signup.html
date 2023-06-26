@@ -1,21 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Sign Up</h1>
+{% extends 'registration_base.html' %}
+{% block content %}
+
+<h1>Sign Up</h1>
 
 <p class="red-text">{{ error_message }}</p>
 
-<form method="POST" action="{% url 'signup' %}">
+<form method="POST" action="{% url 'signup' %}" class="reg-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" class="btn" value="Sign Up">
+    <input type="hidden" class="reg-fields" name="next" value="{{ next }}">
+    <button type="submit" class="btn">Sign Up</button>
 </form>
-</body>
-</html>
 
-
+{% endblock %}
