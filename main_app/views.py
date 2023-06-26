@@ -98,7 +98,7 @@ def inspo(request):
 
 def posts_detail(request, pk):
     post = Post.objects.get(id=pk)
-    comments = Comment.objects.filter(post=post)
+    comments = Comment.objects.filter(post=post).order_by('likes').reverse()
     profile = Profile.objects.get(user=request.user.id)
     likes = Profile.objects.filter(post_likes=post).count()
         # print(post)
@@ -120,9 +120,20 @@ def posts_detail(request, pk):
 
     for comment in comments:
         likes = Profile.objects.filter(comment_likes=comment).count()
-        # print(comment.id)
+        # print(comment)
         comment.likes = likes
         comment.save()
+        if profile.comment_likes.filter(id=comment.id).exists():
+            # print(comment.title, comment.id, "liked by user")
+            comment.user_liked = True
+            comment.save()
+            # print(type(comment.user_liked))
+        elif not profile.comment_likes.filter(id=comment.id).exists():
+            # print(comment.title, comment.id, "NOT liked")
+            comment.user_liked = False
+            comment.save()
+            # print(type(comment.user_liked))
+    # comments = comments.order_by('likes').reverse()
 
     return render(request, 'posts/detail.html', {
         #context variable
