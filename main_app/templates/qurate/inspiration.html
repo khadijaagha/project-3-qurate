@@ -1,20 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
     {% for post in inspo %}
-        <container class="post-container">
-                <div><a href="https://collectionapi.metmuseum.org/public/collection/v1/objects/{{post}}"></a></div>
-            <section class="top-left-post">
-            </section>
-            <section class="middle-post">
-                <div class="img-container"><img class="post-img" src="{{ post.primaryImageSmall }}">  </div>
-            </section>
-            <section class="bottom-left-post">
-                <div class="post-title">{{ post.title }}</div>
-                <div class="description_container">{{ post.description }}</div>
-            </section>
-            <section class="bottom-right-post">
-                <div class="likes_container">{{ post.mediu }}</div>
-            </section>
-        </container> 
+    <div class="card">
+        <div class="card-image">
+          <figure class="image is-4by3">
+            <img src="{{ post.primaryImageSmall }}" alt="Placeholder image">
+          </figure>
+        </div>
+        <div class="card-content">
+          <div class="media">
+            <div class="media-left">
+            </div>
+            <div class="media-content">
+              <p class="title is-4">{{ post.title }}</p>
+            </div>
+          </div>
+      
+          <div class="content">
+            {{ post.description }}
+            {{ post.mediu }}
+            <br>
+          </div>
+        </div>
+      </div>
     {% endfor %}
 {% endblock %}
+
+<div class="card">
+    <div class="card-image">
+      <figure class="image is-4by3">
+        <img src="{{ post.primaryImageSmall }}" alt="Placeholder image">
+      </figure>
+    </div>
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+        </div>
+        <div class="media-content">
+          <p class="title is-4">{{ post.title }}</p>
+        </div>
+      </div>
+  
+      <div class="content">
+        {{ post.description }}
+        {{ post.mediu }}
+        <br>
+        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+      </div>
+    </div>
+  </div>
