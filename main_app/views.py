@@ -47,17 +47,24 @@ def explore(request):
 
         for post in posts:
             likes = Profile.objects.filter(post_likes=post).count()
-            # print(post.id)
+            # print(post)
             post.likes = likes
             post.save()
             if profile.post_likes.filter(id=post.id).exists():
                 print(post.title, post.id, "liked by user")
+                post.user_liked = True
+                post.save()
+                print(type(post.user_liked))
             elif not profile.post_likes.filter(id=post.id).exists():
                 print(post.title, post.id, "NOT liked")
+                post.user_liked = False
+                post.save()
+                print(type(post.user_liked))
 
 
         return render(request, 'qurate/explore.html', {
             'posts': posts,
+            # 'profile': profiles,
             'title': 'Explore'
         })
 
