@@ -10,21 +10,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Concert+One&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <title>Qurate</title>
 </head>
 <body>
-    <container class="home-container">
-        <section class="home-top">
-            <a href="{% url 'signup' %}" class="modal-close waves-effect waves-red btn" style="background-color: #69AAB8;">Register</a>
-            <a href="{% url 'login' %}" class="modal-close waves-effect waves-blue btn" style="background-color: #69AAB8;">Log In</a>
+    <section class="home-top">
+        <a href="{% url 'signup' %}" class="modal-close waves-effect waves-red btn" style="background-color: #69AAB8;">Register</a>
+        <a href="{% url 'login' %}" class="modal-close waves-effect waves-blue btn" style="background-color: #69AAB8;">Log In</a>
+    </section>
+    <main class="home-main">
+        <section class="big-text">
+            <h1 class="welcome-header">Qurate</h1>
         </section>
-        <main class="home-main">
-            <h1>QURATE</h1>
-        </main>
-    </container>
+        <section class="info">
+            <h3>Share Your Art</h3>
+            <p>Qurate is an innovative platform where artists can share their creations and connect with a diverse community of art lovers, enabling the exchange of ideas and fostering a vibrant ecosystem for artistic expression. Unleash your creativity and discover new horizons with Qurate.</p>
+        </section>
+        <container class="login">
+            <section class="colour-change">
+                <a href="{% url 'login' %}" class="login-cube"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+                 <a href="{% url 'login' %}"></a>
+            </section>
+        </container>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let colour1; 
+            let colour2;
+            let colour3;
+            setInterval(function() {
+                const cubes = Array.from(document.querySelectorAll('.colour-change > a'));
+                const bigCube = document.querySelector('.colour-change');
+                cubes.forEach(function(c) {
+                    colour1 = String(Math.floor(Math.random() * 150));
+                    colour2 = String(Math.floor(Math.random() * 230));
+                    colour3 = String(255);
+
+                    console.log(colour1, colour2, colour3)
+                    c.style.backgroundColor = 'rgb(' + colour1 + ', ' + colour2 + ', ' + colour3 + ')';
+                })
+                // bigCube.style.boxShadow = '0 0 7vmin 0.4vmin rgb(' + colour1 + ', ' + colour2 + ', ' + colour3 + ')';
+            }, 1000)
+        })
+    </script>
 </body>
 </html>
-
-
-
