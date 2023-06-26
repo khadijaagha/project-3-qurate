@@ -1,2 +1,9 @@
 pip install requests
 a href="/like-post?post_id={{ post.id }}
+
+
+
+
+{% if profile.post_likes.filter(id=post.id).exists() %}
+    <div class="likes_container">{{ post.likes }}</div>
+{% endif %}

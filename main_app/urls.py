@@ -33,6 +33,6 @@ urlpatterns = [
     # ? idk if this routing is correct
     path('messages/', views.MessageIndex, name='messages'),
     path('message/<int:receiver_id>', views.send_message, name='send_message'),
-    path('message/room/<int:receiver_id>/', views.message_room, name='message_room'),
+    path('message/room/<int:room_id>/', views.message_room, name='message_room'),
 
 ]
