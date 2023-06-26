@@ -17,8 +17,8 @@ class Post(models.Model):
     price = models.IntegerField(blank=True)
     description = models.CharField(max_length=300, blank=True)
     tags = models.CharField(max_length=30, blank=True)
-    # ! likes = models.IntegerField(default=0)
-    likes = models.ManyToManyField(Like, blank=True)
+    likes = models.IntegerField(default=0)
+    # likes = models.ManyToManyField(Like, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -56,16 +56,16 @@ post_save.connect(create_profile, sender=User)
 
 class MessageRoom(models.Model):
     name = models.CharField(max_length=255)
+    participants = models.ManyToManyField(User, related_name='message_room')
 
     def __str__(self):
         return f'{self.name}'
 
 class Message(models.Model):
     body = models.CharField(max_length=1000)
-    timestamp = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # ? Might need to remove the quotes around MessageRoom below
-    room = models.ForeignKey('MessageRoom', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(MessageRoom, on_delete=models.CASCADE, related_name='messages')
 
     def __str__(self):
         return f'{self.user.username} - "{self.body}" - {self.timestamp} - {self.room}'
