@@ -304,9 +304,11 @@ def search(request):
 # * Messages was all removed, so definitely keeping it
 # ! ---------------- MESSAGES ----------------
 def MessageIndex(request):
-
+    all_rooms = MessageRoom.objects.filter(participants=request.user)
+    print(all_rooms)
     return render(request, 'messages/index.html', {
-        
+        'title': 'Your messages',
+        'all_rooms': all_rooms
     })
 
 def send_message(request, receiver_id):

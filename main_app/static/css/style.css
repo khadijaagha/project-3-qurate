@@ -251,6 +251,10 @@ box-shadow: 0 1px 2px black;
   top: 2px;
 }
 
+
+/* ! MESSAGES ------------ */
+
+
 .msg-container {
 
 }
@@ -261,4 +265,17 @@ box-shadow: 0 1px 2px black;
 
 .user-msg {
   border: 1px solid green;
+}
+
+.message-room {
+  border: 1px solid red;
+}
+
+.msg-room-container {
+  display: flex;
+  background-color: #ffffff;
+  margin: 0 auto;
+  height: 80vh;
+  width: 60vw;
+  border: 1px solid red;
 }
