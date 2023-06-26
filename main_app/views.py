@@ -52,10 +52,10 @@ def explore(request):
         #     post_likes = profile.post_likes.all()
         # print()
 
-        for post in posts:
-            likes = profiles.post_likes.get(post_id=post).count()
-            post.likes = likes
-            post.save()
+        # for post in posts:
+        #     likes = profiles.post_likes.get(post_id=post).count()
+        #     post.likes = likes
+        #     post.save()
 
         return render(request, 'qurate/explore.html', {
         'posts': posts,
@@ -142,11 +142,17 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 
 
 def delete_post(request, post_id):
+    
     if request.method == "POST":
         post = Post.objects.get(id=post_id)
         post.delete()
         print("Post deleted 🗑️")
-    return redirect('detail')
+        posts = Post.objects.all().order_by('created_at')        
+
+    return render(request, 'qurate/explore.html', {
+        'posts': posts,
+        'title': 'Explore'
+    })
 
 
 
