@@ -23,7 +23,9 @@
             <div class="img-container"><img class="post-img" src="{{ post.url }}">  </div>
         </section>
         <section class="bottom-left-post">
-            <div class="title">{{post.title}}</div>
+            <a href="{% url 'detail' post.id %}">
+                <div class="title">{{post.title}}</div>
+            </a>
             <div class="description_container">{{ post.description }}</div>
         </section>
         <section class="bottom-right-post">
@@ -35,8 +37,11 @@
                 <img src="https://www.pngall.com/wp-content/uploads/5/Like-Button-PNG-Image-File.png" alt=""></button> 
             </div>
             <form action="{% url 'post_update' post.id %}" method="GET">
+                {% csrf_token %}
                 <button>Edit</button>
-            <form action="{% url 'post_delete' post.id %}" method="GET">
+            </form>    
+            <form action="{% url 'post_delete' post.id %}" method="POST">
+                {% csrf_token %}
                 <button>Delete</button>
             </form>
             <a href="{% url 'tags' tags=post.tags %}"><p>#{{ post.tags }}</p></a>
