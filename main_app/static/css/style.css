@@ -209,18 +209,19 @@ box-shadow: 0 1px 2px black;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
+  column-gap: 2vw;
   row-gap: 4vh;
-  align-items: flex-start;
+  align-items: center;
   overflow-y: auto;
   padding-left: 2vw;
+  padding-right: 2vw;
   padding-top: 2vh;
 }
 
 ::-webkit-scrollbar {
   height: 12px;
   width: 12px;
-  margin-right: .5vw;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -233,27 +234,13 @@ box-shadow: 0 1px 2px black;
 
 /* !------------- explore page */
 
-.explore-body{
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100vh;
-}
-
-.explore-container{
-  width: 380px;
-  margin: auto;
-  border-radius: 4px;
-  background-color: rgb(219, 69, 94);
-}
 
 .like-button{
   display: flex;
-  height: 14px;
+
   position: relative;
-  top: 2px;
+  border: none;
+  background: none;
 }
 
 /* ! MESSAGES */
@@ -341,7 +328,7 @@ box-shadow: 0 1px 2px black;
 /* !  PROFILE PAGE ----- */
 
 .profile-header {
-  width: 100%;
+  width: 98%;
   background-color: #52848f;
 
 }
@@ -396,5 +383,28 @@ font-weight: 300;
 }
 
 
+.drp-menu2 {
+  width: 2vw;
+  height: 3vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit {
+  width: 100%;
+  height: 3vh;
+  margin: 0;
+}
+
+.edit2 {
+  height: 100%;
+}
 
 
+.dropdown-like-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
