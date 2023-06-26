@@ -3,21 +3,20 @@
 
 
 {% for room in all_rooms %}
-<div class="col s12 m7">
 
-  <div class="card horizontal">
 
-    <div class="card-stacked">
-      <div class="card-content">
-        <h2 class="header">Message Room</h2>
-        <p>{{ room.name }}</p>
-      </div>
-      <div class="card-action">
-        <a href="{% url 'message_room' room_id=room.id %}">Message</a>
-      </div>
+<div class="card">
+  <div class="card-content">
+    <div class="content">
+      <p>{{ room.name }}</p>
     </div>
   </div>
+  <footer class="card-footer">
+    <a href="{% url 'message_room' room_id=room.id %}" class="card-footer-item">Message</a>
+
+  </footer>
 </div>
+
 {% endfor %}
 {% endblock %}
 
@@ -27,3 +26,16 @@
     <h5>{{ room.name }}</h5>
   </a>
 </section>
+
+<div class="card horizontal">
+
+  <div class="card-stacked">
+    <div class="card-content">
+      <h2 class="header">Message Room</h2>
+      <p>{{ room.name }}</p>
+    </div>
+    <div class="card-action">
+      <a href="{% url 'message_room' room_id=room.id %}">Message</a>
+    </div>
+  </div>
+</div>

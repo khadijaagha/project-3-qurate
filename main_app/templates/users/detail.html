@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row">
-    <div class="card">
-      <div class="card-content">
-        <span class="card-title">{{ profile.user }}</span>
+<section class="hero is-small profile-header">
+    <div class="hero-body">
+      <p class="title">
+        {{ profile.user }}
+      </p>
+      <div class="subtitle heading-sub">
         <p>Email: {{ profile.user.email }}</p>
         <p>Posts: {{ post_count }}</p>
-        <p>Followers: {{ profile.followed_by.count }}</p>
+        <p>Followers: {{ profile.followed_by.count }}</p>  
         <form action="{% url 'follow' profile.user.id %}" method="POST">
             {% csrf_token %}
             {% if not is_following %}
@@ -14,10 +16,10 @@
             {% else %}
                 <button type="submit">Unfollow</button>
             {% endif %}
-          </form>
-      </div>
+          </form>      
+        </div>
     </div>
-</div>
+  </section>
 {% for post in posts %}
 <container class="post-container">
     <section class="top-left-post">
@@ -30,7 +32,7 @@
         <div class="img-container"><img class="post-img" src="{{ post.url }}">  </div>
     </section>
     <section class="bottom-left-post">
-        <div class="title">{{post.title}}</div>
+        <div class="post-title">{{post.title}}</div>
         <br>
         <div class="description_container">{{ post.description }}</div>
     </section>

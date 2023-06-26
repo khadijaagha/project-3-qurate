@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<container class="msg-page-container">
   <container class="msg-container">
-
       {% for message in messages %}
         {% if message.sender == request.user %}
         <section class="message-list">
@@ -32,12 +32,12 @@
       {% endfor %}
 
   </container>
-    <form method="POST" action="{% url 'send_message' receiver_id=receiver.id %}">
+    <form method="POST" class="message-bar" action="{% url 'send_message' receiver_id=receiver.id %}">
       {% csrf_token %}
       <div class="control">
-        <textarea name="body" class="textarea is-focused" placeholder="Focused textarea"></textarea>
+        <textarea name="body" class="textarea is-focused message-textarea" placeholder="Type your message..."></textarea>
       </div>
-      <button type="submit">Send Message</button>
+      <button class="send-btn" type="submit">➤</button>
     </form>
-
+  </container>
 {% endblock %}
