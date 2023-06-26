@@ -7,3 +7,17 @@ a href="/like-post?post_id={{ post.id }}
 {% if profile.post_likes.filter(id=post.id).exists() %}
     <div class="likes_container">{{ post.likes }}</div>
 {% endif %}
+
+
+"""
+
+posts = Post.objects.all().order_by('created_at')
+    profile = Profile.objects.get(user=request.user.id)
+
+    for post in posts:
+        likes = Profile.objects.filter(post_likes=post).count()
+        # print(post.id)
+        post.likes = likes
+        post.save()
+
+"""
