@@ -397,9 +397,12 @@ border: 1px solid red;
   left: -130px; */
   /* background-color: aliceblue;
    */
-} */
+} 
 
-
+.comment-like {
+  background: none;
+  border: none;
+}
 
 .drp-menu2 {
   width: 2vw;
