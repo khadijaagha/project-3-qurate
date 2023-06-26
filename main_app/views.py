@@ -92,10 +92,18 @@ def inspo(request):
 def posts_detail(request, pk):
     post = Post.objects.get(id=pk)
     comments = Comment.objects.filter(post=post)
+    profile = Profile.objects.get(user=request.user.id)
 
     if request.method == 'POST':
         comment_body = request.POST.get('comment-body')
         comment = Comment.objects.create(body=comment_body, user=request.user, post=post)
+
+    for comment in comments:
+        likes = Profile.objects.filter(comment_likes=comment).count()
+        # print(comment.id)
+        comment.likes = likes
+        comment.save()
+
     return render(request, 'posts/detail.html', {
         #context variable
         'post': post,

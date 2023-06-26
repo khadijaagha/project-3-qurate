@@ -20,7 +20,7 @@
     {% csrf_token %}
     <button>Like
     </button>
-    {{ post.comment.likes.count }} likes
+    {{ comment.likes }} likes
 </form>
 {% if comment.user == request.user %}
 <form action="{% url 'delete_comment' post.id comment.id %}" method="POST">
