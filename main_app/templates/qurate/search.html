@@ -65,14 +65,14 @@
                 <form action="{% url 'like_post' tag.id %}" method="POST">
                     {% csrf_token %}
                     {% if tag.user_liked is True %}
-                    <button>
+                    <button class="comment-like">
                       <span class="icon">
                         <i class="fas fa-heart" style="color: #ff0000;"></i>
                       </span>
                       <div class="likes_container">{{ tag.likes }}</div>
                     </button>
                     {% elif tag.user_liked is False %}
-                    <button>
+                    <button class="comment-like">
                       <span class="icon">
                         <i class="far fa-heart" style="color: #000000;"></i>
                       </span>
