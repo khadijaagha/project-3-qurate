@@ -302,9 +302,11 @@ def search(request):
 # * Messages was all removed, so definitely keeping it
 # ! ---------------- MESSAGES ----------------
 def MessageIndex(request):
-
+    all_rooms = MessageRoom.objects.filter(participants=request.user)
+    print(all_rooms)
     return render(request, 'messages/index.html', {
-        
+        'title': 'Your messages',
+        'all_rooms': all_rooms
     })
 
 def send_message(request, receiver_id):
@@ -316,11 +318,13 @@ def send_message(request, receiver_id):
         print(f'receiver {receiver}')
         sender = request.user
         print(f'sender {sender}')
-        room_name = f"{sender.username} and {receiver.username}"
-        room, created = MessageRoom.objects.get_or_create(name=room_name)
-        room.participants.add(sender, receiver)
+        room = MessageRoom.objects.filter(participants=sender).filter(participants=receiver).first()
+        if room is None:
+            room_name = f"{sender.username} - {receiver.username}"
+            room = MessageRoom.objects.create(name=room_name)
+            room.participants.add(sender, receiver)
         message = Message.objects.create(body=body, sender=sender, room=room)
-        return redirect('message_room', receiver_id=receiver.id)
+        return redirect('message_room', room_id=room.id)
     else:
         print('else')
         receiver = User.objects.get(pk=receiver_id)
@@ -328,15 +332,16 @@ def send_message(request, receiver_id):
             'receiver': receiver
         })
 
-def message_room(request, receiver_id):
-    room = MessageRoom.objects.get(id=receiver_id)
+def message_room(request, room_id):
+    room = MessageRoom.objects.get(id=room_id)
     messages = room.messages.all().order_by('timestamp')
-    receiver = User.objects.get(pk=receiver_id)
+    receiver = room.participants.exclude(id=request.user.id).first()
     
     return render(request, 'messages/room.html', {
         'room': room,
         'messages': messages,
-        'receiver': receiver
+        'receiver': receiver,
+        'title': room
     })
 
 
