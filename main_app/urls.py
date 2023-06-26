@@ -31,5 +31,7 @@ urlpatterns = [
     #! -------------- MESSAGE ROUTES --------------
     # ? idk if this routing is correct
     path('messages/', views.MessageIndex, name='messages'),
-    path('message/', views.send_message, name='message_user'),
+    path('message/<int:receiver_id>', views.send_message, name='send_message'),
+    path('message/room/<int:receiver_id>/', views.message_room, name='message_room'),
+
 ]

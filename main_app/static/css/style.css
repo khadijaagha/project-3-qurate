@@ -250,3 +250,15 @@ box-shadow: 0 1px 2px black;
   position: relative;
   top: 2px;
 }
+
+.msg-container {
+
+}
+
+.rec-msg {
+  border: 1px solid red;
+}
+
+.user-msg {
+  border: 1px solid green;
+}

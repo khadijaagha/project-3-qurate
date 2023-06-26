@@ -18,7 +18,7 @@
             <div class="card-action">
             <a href="{% url 'profile' user.profile.id %}">Profile</a>
             <a href="#">Follow</a>
-            <a href="{% url 'message_user' user.profile.id %}">Message</a>
+            <a href="{% url 'send_message' receiver_id=user.profile.id %}">Message</a>
             </div>
         </div>
     {% empty %}

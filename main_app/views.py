@@ -278,18 +278,36 @@ def MessageIndex(request):
         
     })
 
-def send_message(request):
-    pass
+def send_message(request, receiver_id):
+    if request.method == 'POST':
+        print('if')
+        print(receiver_id)
+        body = request.POST.get('body')
+        receiver = User.objects.get(id=receiver_id)
+        print(f'receiver {receiver}')
+        sender = request.user
+        print(f'sender {sender}')
+        room_name = f"{sender.username} and {receiver.username}"
+        room, created = MessageRoom.objects.get_or_create(name=room_name)
+        room.participants.add(sender, receiver)
+        message = Message.objects.create(body=body, sender=sender, room=room)
+        return redirect('message_room', receiver_id=receiver.id)
+    else:
+        print('else')
+        receiver = User.objects.get(pk=receiver_id)
+        return render(request, 'messages/room.html', {
+            'receiver': receiver
+        })
 
-class Room(LoginRequiredMixin, View):
-    def get(self, request, room_name):
-        room = MessageRoom.objects.filter(name=room_name).first()
-        chats = []
+def message_room(request, receiver_id):
+    room = MessageRoom.objects.get(id=receiver_id)
+    messages = room.messages.all().order_by('timestamp')
+    receiver = User.objects.get(pk=receiver_id)
+    
+    return render(request, 'messages/room.html', {
+        'room': room,
+        'messages': messages,
+        'receiver': receiver
+    })
 
-        if room:
-            messages = Message.objects.filter(room=room)
-        else:
-            room = MessageRoom(name=room_name)
-            room.save()
 
-        return render(request, 'messages/room.html', {'room_name': room_name, 'messages': messages})
