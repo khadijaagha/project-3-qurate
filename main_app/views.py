@@ -4,7 +4,7 @@ import os
 import requests
 import random
 from . import urls
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.urls import reverse_lazy
@@ -20,6 +20,24 @@ from .models import *
 from .forms import UserCreationForm
 from django_ratelimit.decorators import ratelimit
 
+# ! ---------------- LIKES FUNCTION ----------------
+def get_likes(posts, profile):
+    for post in posts:
+        likes = Profile.objects.filter(post_likes=post).count()
+        # print(post)
+        post.likes = likes
+        post.save()
+        if profile.post_likes.filter(id=post.id).exists():
+            # print(post.title, post.id, "liked by user")
+            post.user_liked = True
+            post.save()
+            # print(type(post.user_liked))
+        elif not profile.post_likes.filter(id=post.id).exists():
+            # print(post.title, post.id, "NOT liked")
+            post.user_liked = False
+            post.save()
+            # print(type(post.user_liked))
+
 # Create your views here.
 def home(request):
     return render(request, 'home.html')
@@ -32,9 +50,10 @@ def about(request):
 def user_feed(request):
     following_users = request.user.profile.follows.all()
     user_posts = Post.objects.filter(user__profile__in=following_users).order_by('created_at')
-    # ? We probably don't want the below change
-    # ? user_posts = Post.objects.filter(user__profile__in=following_users)
+    profile = Profile.objects.get(user=request.user.id)
     
+    get_likes(user_posts, profile)
+
     return render(request, 'qurate/feed.html', {
         'title': 'Your Feed',
         'posts': user_posts
@@ -45,22 +64,7 @@ def explore(request):
         posts = Post.objects.all().order_by('created_at')
         profile = Profile.objects.get(user=request.user.id)
 
-        for post in posts:
-            likes = Profile.objects.filter(post_likes=post).count()
-            # print(post)
-            post.likes = likes
-            post.save()
-            if profile.post_likes.filter(id=post.id).exists():
-                print(post.title, post.id, "liked by user")
-                post.user_liked = True
-                post.save()
-                print(type(post.user_liked))
-            elif not profile.post_likes.filter(id=post.id).exists():
-                print(post.title, post.id, "NOT liked")
-                post.user_liked = False
-                post.save()
-                print(type(post.user_liked))
-
+        get_likes(posts, profile)
 
         return render(request, 'qurate/explore.html', {
             'posts': posts,
@@ -91,10 +95,6 @@ def inspo(request):
         'title': 'Inspiration',
     })
 
-# @login_required
-# ? def posts_detail(request, posts_id):
-# ?     return render(request, 'posts/detail.html', {
-# ?     })
 
 def posts_detail(request, pk):
     post = Post.objects.get(id=pk)
@@ -183,7 +183,8 @@ def like_post(request, pk):
         profile.save()
         print("Like removed 👎", pk)
 
-    return redirect('explore')
+    # return redirect('explore')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 # ! COMMENTS ---------------------
@@ -195,14 +196,6 @@ def add_comment(request, post_id):
 
 @login_required
 def like_comment(request, post_id, comment_id):
-    # comment = Comment.objects.get(id=comment_id)
-    # if not comment.likes.filter(user=request.user).exists():    
-    #     if request.method == 'POST':
-    #         like = Like.objects.create(user=request.user)
-    #         comment.likes.add(like)
-    #         comment.save()
-    #         print("Liked")
-    # return redirect('detail', post_id)
 
     comment = Comment.objects.get(id=comment_id)
     profile = Profile.objects.get(user=request.user.id)
@@ -233,6 +226,9 @@ def delete_comment(request, comment_id, post_id ):
 # ! TAGS ----------------------
 def tags_index(request, tags):
     posts = Post.objects.filter(tags=tags)
+    profile = Profile.objects.get(user=request.user.id)
+
+    get_likes(posts, profile)
     return render(request, 'qurate/tags.html', {
         'title': '#' + tags,
         'posts': posts
@@ -268,6 +264,7 @@ def signup(request):
 @login_required
 def users_detail(request, user_id):
     profile = Profile.objects.get(id=user_id)
+    viewer_profile = Profile.objects.get(id=request.user.id)
     user_posts = Post.objects.filter(user=user_id)
     post_count = Post.objects.filter(user=user_id).count();
     # ! This if else statement should probably be kept, right?
@@ -276,9 +273,11 @@ def users_detail(request, user_id):
     else:
         is_following = False;
     # !
+    get_likes(user_posts, viewer_profile)
+
     return render(request, 'users/detail.html', {
         'profile': profile,
-        'title': f"{profile.user}'s Pofile",
+        'title': f"{profile.user}'s Profile",
         'posts': user_posts,
         # ! These two lines below should also probably be kept, right?
         'post_count': post_count,

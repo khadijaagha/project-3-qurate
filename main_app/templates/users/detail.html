@@ -21,26 +21,7 @@
     </div>
   </section>
 {% for post in posts %}
-<container class="post-container">
-    <section class="top-left-post">
-        <div class="user_container">@{{post.user}}</div>
-    </section>
-    <section class="top-right-post">
-        <div class="price_container">£{{ post.price }}</div>
-    </section>
-    <section class="middle-post">
-        <div class="img-container"><img class="post-img" src="{{ post.url }}">  </div>
-    </section>
-    <section class="bottom-left-post">
-        <div class="post-title">{{post.title}}</div>
-        <br>
-        <div class="description_container">{{ post.description }}</div>
-    </section>
-    <section class="bottom-right-post">
-        <div class="likes_container">{{ post.likes }}</div>
-        <a href="{% url 'tags' tags=post.tags %}"><p>#{{ post.tags }}</p></a>
-    </section>
-</container> 
+    {% include 'post_container.html' %}
 {% endfor %}
 
   
