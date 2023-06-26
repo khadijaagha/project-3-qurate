@@ -1,101 +1,136 @@
 {% extends 'base.html' %}
 {% block content %}
-
-<div class="detail-container">
-    
-    <div class="post-container">
-        <div class="post-image">
-
-            <p><img src="{{ post.url }}" ></p>
+<div class="card">
+    <div class="card-image">
+      <figure class="image is-7by5">
+        <a href="{% url 'detail' post.id %}"><img src="{{ post.url }}" alt="Placeholder image"></a>
+      </figure>
+    </div>
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="https://thenounproject.com/api/private/icons/996323/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0" alt="Placeholder image">
+          </figure>
         </div>
-        <p>{{ post.title }}</p>
-        <p>{{ post.price }}</p>
-        <p>{{ post.description }}</p>
-        <p>{{ post.tags }}</p>
-        <p>{{ post.likes.count }}</p>
-    
-    </div>
-    <div class="dropdown-like-container">
-        <form action="{% url 'like_post' post.id %}" method="POST">
-            {% csrf_token %}
-            {% if post.user_liked is True %}
-            <button>
-              <span class="icon">
-                <i class="fas fa-heart" style="color: #ff0000;"></i>
-              </span>
-              <div class="likes_container">{{ post.likes }}</div>
-            </button>
-            {% elif post.user_liked is False %}
-            <button>
-              <span class="icon">
-                <i class="far fa-heart" style="color: #000000;"></i>
-              </span>
-              <div class="likes_container">{{ post.likes }}</div>
-            </button>
+        <div class="media-content">
+          <p class="subtitle is-3"><a href="{% url 'profile' post.user.profile.id %}">@{{post.user}}</a></p>
+        </div>
+      </div>
+      <div class="content">
+        <a href="{% url 'detail' post.id %}">{{post.title}}</a>
+        <div class="dropdown-like-container">
+            <div class="description_container">{{ post.description }}</div>
+            <a href="{% url 'tags' tags=post.tags %}"><p>#{{ post.tags }}</p></a>
+        </div>
+        <br>
+        <div class="dropdown-like-container">
+            <form action="{% url 'like_post' post.id %}" method="POST">
+                {% csrf_token %}
+                {% if post.user_liked is True %}
+                <button>
+                  <span class="icon">
+                    <i class="fas fa-heart" style="color: #ff0000;"></i>
+                  </span>
+                  <div class="likes_container">{{ post.likes }}</div>
+                </button>
+                {% elif post.user_liked is False %}
+                <button>
+                  <span class="icon">
+                    <i class="far fa-heart" style="color: #000000;"></i>
+                  </span>
+                  <div class="likes_container">{{ post.likes }}</div>
+                </button>
+                {% endif %}
+              </form>
+          {% if request.user == post.user %}
+          <a class='dropdown-trigger btn drp-menu2' href='#' data-target='dropdown1'>...</a>
+          <ul id='dropdown1' class='dropdown-content'>
+            <li>
+              <form class="edit2" action="{% url 'post_delete' post.id %}" method="POST">
+                {% csrf_token %}
+                <button class="edit">Delete</button>
+              </form>
+            </li>
+            <li>
+              <form action="{% url 'post_update' post.id %}" method="GET">
+                {% csrf_token %}
+                <button class="edit">Edit</button>
+              </form>
+            </li>
+          </ul>
+          {% endif %}
+        </div>
+        <div class="comments-containers">
+            <h2>Comments</h2>
+        
+            {% for comment in comments %}
+            {{ comment.body }}
+            <br>
+            {{comment.user.username}}
+            <br>
+            <form action="{% url 'like_comment' post.id comment.id %}" method="POST">
+                {% csrf_token %}
+                <button>Like
+                </button>
+                {{ comment.likes }} likes
+            </form>
+            {% if comment.user == request.user %}
+            <form action="{% url 'delete_comment' post.id comment.id %}" method="POST">
+                {% csrf_token %}
+                <button>Delete</button>
+            </form>
             {% endif %}
-          </form>
-      {% if request.user == post.user %}
-      <a class='dropdown-trigger btn drp-menu2' href='#' data-target='dropdown1'>...</a>
-      <ul id='dropdown1' class='dropdown-content'>
-        <li>
-          <form class="edit2" action="{% url 'post_delete' post.id %}" method="POST">
-            {% csrf_token %}
-            <button class="edit">Delete</button>
-          </form>
-        </li>
-        <li>
-          <form action="{% url 'post_update' post.id %}" method="GET">
-            {% csrf_token %}
-            <button class="edit">Edit</button>
-          </form>
-        </li>
-      </ul>
-      {% endif %}
-
-
-    </div>
-
-
-    
-    
-    <div class="comments-containers">
-        <h2>Comments</h2>
-    
-        {% for comment in comments %}
-        {{ comment.body }}
-        {{comment.user.username}}
-        <form action="{% url 'like_comment' post.id comment.id %}" method="POST">
-            {% csrf_token %}
-            <button>Like
-            </button>
-            {{ comment.likes }} likes
-        </form>
-        {% if comment.user == request.user %}
-        <form action="{% url 'delete_comment' post.id comment.id %}" method="POST">
-            {% csrf_token %}
-            <button>Delete</button>
-        </form>
-        {% endif %}
-        {% endfor %}
-    
-    </div>
-    
-    
-    <div class="add-comment">
-    
-        <form action="" method="POST">
-            {% csrf_token %}
-          <textarea name="comment-body" id="" cols="30" rows="10">
+            {% endfor %}
         
-          </textarea>  
-          <br>
-          <button type="submit">Add Comment</button>
-        
-        </form>
+            <div class="add-comment">
     
-    
+                <form action="" method="POST">
+                    {% csrf_token %}
+                  <textarea name="comment-body" id="" cols="30" rows="10">
+                
+                  </textarea>  
+                  <br>
+                  <button type="submit">Add Comment</button>
+                
+                </form>
+            
+            
+            </div>            
+        </div>
+
+
+      </div>
+
+
     </div>
+  </div>
+
+
+Message Fin Garrard, Tom Reeve
+
+
+
+
+
+
+
+
+
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.dropdown-trigger');
+        var options = {
+            alignment: 'right',
+            coverTrigger: false
+        };
+        var instances = M.Dropdown.init(elems, options);
+    });
+</script>
+
+
 
 {% endblock %}
 
