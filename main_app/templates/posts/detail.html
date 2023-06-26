@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+
 <p>post details</p>
 
 <p><img src="{{ post.url }}" ></p>
@@ -42,3 +45,5 @@
 
 </form>
 <a href="{% url 'add_comment' post.id %}">Add Comment</a>
+
+{% endblock %}
