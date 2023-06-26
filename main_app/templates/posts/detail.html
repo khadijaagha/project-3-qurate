@@ -15,13 +15,47 @@
         <p>{{ post.likes.count }}</p>
     
     </div>
-    
-    <div class="detail-btns">
-        <a href="{% url 'post_update' post.id %}">Edit</a>
-        <a href="{% url 'post_delete' post.id %}">Delete</a>
+    <div class="dropdown-like-container">
+        <form action="{% url 'like_post' post.id %}" method="POST">
+            {% csrf_token %}
+            {% if post.user_liked is True %}
+            <button>
+              <span class="icon">
+                <i class="fas fa-heart" style="color: #ff0000;"></i>
+              </span>
+              <div class="likes_container">{{ post.likes }}</div>
+            </button>
+            {% elif post.user_liked is False %}
+            <button>
+              <span class="icon">
+                <i class="far fa-heart" style="color: #000000;"></i>
+              </span>
+              <div class="likes_container">{{ post.likes }}</div>
+            </button>
+            {% endif %}
+          </form>
+      {% if request.user == post.user %}
+      <a class='dropdown-trigger btn drp-menu2' href='#' data-target='dropdown1'>...</a>
+      <ul id='dropdown1' class='dropdown-content'>
+        <li>
+          <form class="edit2" action="{% url 'post_delete' post.id %}" method="POST">
+            {% csrf_token %}
+            <button class="edit">Delete</button>
+          </form>
+        </li>
+        <li>
+          <form action="{% url 'post_update' post.id %}" method="GET">
+            {% csrf_token %}
+            <button class="edit">Edit</button>
+          </form>
+        </li>
+      </ul>
+      {% endif %}
+
+
     </div>
-    
-    
+
+
     
     
     <div class="comments-containers">
@@ -64,3 +98,6 @@
 </div>
 
 {% endblock %}
+
+
+
