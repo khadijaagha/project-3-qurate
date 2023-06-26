@@ -3,13 +3,16 @@ html {
   overflow: hidden;
 }
 
+:root {
+  --bg: #69AAB8;
+}
 
 body {
   display: flex;
   height: 100vh;
   width: 100vw;
   flex-direction: column;
-  background-color: #69AAB8;
+  background-color: var(--bg);
   font-family: sans-serif;
   margin: 0;
   overflow: hidden;
@@ -383,6 +386,7 @@ font-weight: 300;
 }
 
 
+
 .drp-menu2 {
   width: 2vw;
   height: 3vh;
@@ -401,10 +405,73 @@ font-weight: 300;
   height: 100%;
 }
 
+.home-main {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  border: 0;
+}
+
+.home-top {
+  border: 0;
+}
+.home-top > a {
+  margin: 25px 40px 0 0;
+}
 
 .dropdown-like-container {
   display: flex;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
+}
+
+/* ! ----- REGISTRATION & HOME ----- ! */
+
+.reg-main-content {
+  grid-area: 2 / 2 / 3 / 3;
+  /* ! getting rid of error feel free to style as you want, will need to change classes when adding content in to this section */
+  visibility: visible;
+  display: flex;
+  flex-direction: column;
+  /* width: 50%; */
+  margin: 0 auto;
+}
+
+.reg-section {
+  /* height: 85.8vh; */
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  row-gap: 4vh;
+  align-items: flex-start;
+  /* overflow-y: auto; */
+  padding-left: 2vw;
+  padding-right: 2vw;
+  padding-top: 2vh;
+  /* color: black; */
+}
+
+.reg-section > h1 {
+  padding: 10px 20px 0 0;
+  font-size: 30px;
+  text-decoration: solid;
+}
+
+form.reg-form > p > label {
+  color: rgb(70, 70, 70);
+}
+
+form.reg-form > p > .active {
+  color: black;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 30px #9dccd7 inset !important;
 }

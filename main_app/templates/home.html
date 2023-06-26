@@ -16,34 +16,13 @@
 <body>
     <container class="home-container">
         <section class="home-top">
-            <a class="waves-effect waves-light btn modal-trigger" style="background-color: #69AAB8;" href="#modal1">Log in or Register</a>
-            <div id="modal1" class="modal">
-                <div class="modal-content">
-                </div>
-                <div class="modal-footer">
-                    <a href="{% url 'signup' %}" class="modal-close waves-effect waves-red btn-flat" style="background-color: #69AAB8;">Register</a>
-                    <a href="{% url 'login' %}" class="modal-close waves-effect waves-blue btn-flat" style="background-color: #69AAB8;">Log In</a>
-                </div>
-            </div>
+            <a href="{% url 'signup' %}" class="modal-close waves-effect waves-red btn" style="background-color: #69AAB8;">Register</a>
+            <a href="{% url 'login' %}" class="modal-close waves-effect waves-blue btn" style="background-color: #69AAB8;">Log In</a>
         </section>
         <main class="home-main">
             <h1>QURATE</h1>
         </main>
     </container>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.modal');
-            const options = {
-                dismissible: true, 
-                opacity: 0.5,
-                inDuration: 300,
-                outDuration: 200,
-                startingTop: '4%',
-                endingTop: '10%'
-            };
-            var instances = M.Modal.init(elems, options);
-        });            
-    </script>
 </body>
 </html>
 
