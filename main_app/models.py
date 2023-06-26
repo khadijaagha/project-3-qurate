@@ -17,8 +17,8 @@ class Post(models.Model):
     price = models.IntegerField(blank=True)
     description = models.CharField(max_length=300, blank=True)
     tags = models.CharField(max_length=30, blank=True)
-    # ! likes = models.IntegerField(default=0)
-    likes = models.ManyToManyField(Like, blank=True)
+    likes = models.IntegerField(default=0)
+    # likes = models.ManyToManyField(Like, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

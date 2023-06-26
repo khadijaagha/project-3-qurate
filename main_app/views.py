@@ -15,7 +15,8 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, Post, Comment, User, Message, MessageRoom, Like
+# from .models import Profile, Post, Comment, User, Message, MessageRoom, Like
+from .models import *
 from .forms import UserCreationForm
 from django_ratelimit.decorators import ratelimit
 
@@ -41,8 +42,21 @@ def user_feed(request):
 
 def explore(request):
         posts = Post.objects.all().order_by('created_at')
-        # ? We probably don't want the below change
-        # ? posts = Post.objects.all()
+        profiles = Profile.objects.all()
+        
+        # post_likes = profiles.posts_liked.all()
+        # print(post_likes)
+
+        # for profile in profiles:
+        #     # post_likes = profile.post_likes.get(post_id=post).count()
+        #     post_likes = profile.post_likes.all()
+        # print()
+
+        for post in posts:
+            likes = profiles.post_likes.get(post_id=post).count()
+            post.likes = likes
+            post.save()
+
         return render(request, 'qurate/explore.html', {
         'posts': posts,
         'title': 'Explore'
@@ -130,13 +144,16 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 @login_required
 def like_post(request, pk):
     post = Post.objects.get(id=pk)
+    profile = Profile.objects.get(user=request.user.id)
 
-    if not post.likes.filter(user=request.user).exists():
-
-        like = Like.objects.create(user = request.user)
-        post.likes.add(like)
-        post.save() 
+    if not profile.post_likes.filter(id=pk).exists():
+        profile.post_likes.add(post)
+        profile.save()
         print("Like button clicked 👍", pk)
+    elif profile.post_likes.filter(id=pk).exists():
+        profile.post_likes.remove(post)
+        profile.save()
+        print("Like removed 👎", pk)
 
     return redirect('explore')
 
@@ -150,13 +167,27 @@ def add_comment(request, post_id):
 
 @login_required
 def like_comment(request, post_id, comment_id):
+    # comment = Comment.objects.get(id=comment_id)
+    # if not comment.likes.filter(user=request.user).exists():    
+    #     if request.method == 'POST':
+    #         like = Like.objects.create(user=request.user)
+    #         comment.likes.add(like)
+    #         comment.save()
+    #         print("Liked")
+    # return redirect('detail', post_id)
+
     comment = Comment.objects.get(id=comment_id)
-    if not comment.likes.filter(user=request.user).exists():    
-        if request.method == 'POST':
-            like = Like.objects.create(user=request.user)
-            comment.likes.add(like)
-            comment.save()
-            print("Liked")
+    profile = Profile.objects.get(user=request.user.id)
+
+    if not profile.comment_likes.filter(id=comment_id).exists():
+        profile.comment_likes.add(comment)
+        profile.save()
+        print("Comment like button clicked 👍", comment_id)
+    elif profile.comment_likes.filter(id=comment_id).exists():
+        profile.comment_likes.remove(comment)
+        profile.save()
+        print("Comment like removed 👎", comment_id)
+
     return redirect('detail', post_id)
 
 class CommentDelete(LoginRequiredMixin, DeleteView):
