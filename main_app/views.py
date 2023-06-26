@@ -317,6 +317,8 @@ def search(request):
         # ! These 3 lines below have been removed and instead there is \/
         no_hash = search_content.strip('#')
         tags = Post.objects.filter(tags__icontains=no_hash)
+        profile = Profile.objects.get(user=request.user.id)
+        get_likes(tags, profile)
         print(f'tags {tags}')
         # ! This is what is here instead 
         # ? tags = Post.objects.filter(tags__icontains=search_content)
