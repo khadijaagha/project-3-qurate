@@ -12,9 +12,9 @@
         <form action="{% url 'follow' profile.user.id %}" method="POST">
             {% csrf_token %}
             {% if not is_following %}
-                <button type="submit">Follow</button>
+            <button type="submit" class="button is-primary is-outlined">Follow</button>
             {% else %}
-                <button type="submit">Unfollow</button>
+            <button type="submit" class="button is-success is-outlined">Unfollow</button>
             {% endif %}
           </form>      
         </div>
