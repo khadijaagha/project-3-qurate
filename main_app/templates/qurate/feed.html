@@ -16,6 +16,16 @@
         <div class="title">{{post.title}}</div>
         </a>
         <div class="description_container">{{ post.description }}</div>
+        {% if request.user == post.user %}
+        <form action="{% url 'post_update' post.id %}" method="GET">
+            {% csrf_token %}
+            <button>Edit</button>
+        </form>    
+        <form action="{% url 'post_delete' post.id %}" method="POST">
+            {% csrf_token %}
+            <button>Delete</button>
+        </form>
+        {% endif %}
     </section>
     <section class="bottom-right-post">
         <div class="likes_container">{{ post.likes }}</div>
