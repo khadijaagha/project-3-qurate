@@ -32,9 +32,26 @@ def about(request):
 def user_feed(request):
     following_users = request.user.profile.follows.all()
     user_posts = Post.objects.filter(user__profile__in=following_users).order_by('created_at')
+    profile = Profile.objects.get(user=request.user.id)
     # ? We probably don't want the below change
     # ? user_posts = Post.objects.filter(user__profile__in=following_users)
     
+    for post in user_posts:
+            likes = Profile.objects.filter(post_likes=post).count()
+            # print(post)
+            post.likes = likes
+            post.save()
+            if profile.post_likes.filter(id=post.id).exists():
+                print(post.title, post.id, "liked by user")
+                post.user_liked = True
+                post.save()
+                # print(type(post.user_liked))
+            elif not profile.post_likes.filter(id=post.id).exists():
+                print(post.title, post.id, "NOT liked")
+                post.user_liked = False
+                post.save()
+                # print(type(post.user_liked))
+
     return render(request, 'qurate/feed.html', {
         'title': 'Your Feed',
         'posts': user_posts
@@ -54,12 +71,12 @@ def explore(request):
                 print(post.title, post.id, "liked by user")
                 post.user_liked = True
                 post.save()
-                print(type(post.user_liked))
+                # print(type(post.user_liked))
             elif not profile.post_likes.filter(id=post.id).exists():
                 print(post.title, post.id, "NOT liked")
                 post.user_liked = False
                 post.save()
-                print(type(post.user_liked))
+                # print(type(post.user_liked))
 
 
         return render(request, 'qurate/explore.html', {
