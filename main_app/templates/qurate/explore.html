@@ -9,12 +9,12 @@
         </section>
         <section class="top-right-post">
             <div class="price_container">£{{ post.price }}</div>
-                <form action="{% url 'like_post' post.id %}" method="POST">
+                <!-- <form action="{% url 'like_post' post.id %}" method="POST">
                     {% csrf_token %}
                     <button><div class="like-button">
                 </form>
                 <img src="https://www.pngall.com/wp-content/uploads/5/Like-Button-PNG-Image-File.png" alt=""></button> 
-            </div>
+            </div> -->
         </section>
         <section class="top-left-post">
             <div class="user_container"><a href="{% url 'profile' post.user.profile.id %}">@{{post.user}}</a></div>
@@ -28,6 +28,12 @@
         </section>
         <section class="bottom-right-post">
             <div class="likes_container">{{ post.likes }}</div>
+                <form action="{% url 'like_post' post.id %}" method="POST">
+                    {% csrf_token %}
+                    <button><div class="like-button">
+                </form>
+                <img src="https://www.pngall.com/wp-content/uploads/5/Like-Button-PNG-Image-File.png" alt=""></button> 
+            </div>
             <form action="{% url 'post_update' post.id %}" method="GET">
                 <button>Edit</button>
             <form action="{% url 'post_delete' post.id %}" method="GET">
@@ -40,5 +46,3 @@
 
     {% endfor %}
 {% endblock %}
-    
-
