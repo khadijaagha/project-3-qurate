@@ -200,7 +200,8 @@ box-shadow: 0 1px 2px black;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-between, flex-start;
+  column-gap: 2vw;
   row-gap: 4vh;
   align-items: flex-start;
   overflow-y: auto;
@@ -251,31 +252,48 @@ box-shadow: 0 1px 2px black;
   top: 2px;
 }
 
-
-/* ! MESSAGES ------------ */
-
-
 .msg-container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: 80%;
+  background-color: #fff;
+  overflow-y: auto;
+  column-gap: .5vh;
+}
 
+.message-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 100%;
+  gap: .5vh;
+
+}
+
+.rec-message-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  max-width: 100%;
 }
 
 .rec-msg {
-  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  max-width: 45%;
+  min-width: 35%;
 }
 
 .user-msg {
-  border: 1px solid green;
-}
-
-.message-room {
-  border: 1px solid red;
-}
-
-.msg-room-container {
   display: flex;
-  background-color: #ffffff;
-  margin: 0 auto;
-  height: 80vh;
-  width: 60vw;
-  border: 1px solid red;
+  flex-direction: column;
+  max-width: 45%;
+  min-width: 35%;
 }
+
+
+
+/* ! MESSAGES */
+
+
