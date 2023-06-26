@@ -1,33 +1,43 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Messages</h1>
-
   <container class="msg-container">
-    <section class="message-list">
+
       {% for message in messages %}
         {% if message.sender == request.user %}
-          <div class="user-msg">
-            <p>Sender: {{ message.sender }}</p>
-            <p>Body: {{ message.body }}</p>
-            <p>Timestamp: {{ message.timestamp }}</p>
+        <section class="message-list">
+        <article class="message is-link user-msg">
+          <div class="message-header">
+            <p>You<br>{{ message.timestamp }}</p>
           </div>
+          <div class="message-body">
+            {{ message.body }}
+          </div>
+        </article> 
+         </section>
         {% else %}
-          <div class="rec-msg">
-            <p>Sender: {{ message.sender }}</p>
-            <p>Body: {{ message.body }}</p>
-            <p>Timestamp: {{ message.timestamp }}</p>
+        <section class="rec-message-list">
+        <article class="message is-info rec-msg">
+          <div class="message-header">
+            <p>{{ message.sender }}<br>{{ message.timestamp }}</p>
           </div>
+          <div class="message-body">
+            {{ message.body }}
+          </div>
+        </article>
+        </section>
         {% endif %}
       {% empty %}
         <p>No messages available.</p>
       {% endfor %}
-    </section>
 
+  </container>
     <form method="POST" action="{% url 'send_message' receiver_id=receiver.id %}">
       {% csrf_token %}
-      <textarea name="body" placeholder="Enter your message"></textarea>
+      <div class="control">
+        <textarea name="body" class="textarea is-focused" placeholder="Focused textarea"></textarea>
+      </div>
       <button type="submit">Send Message</button>
     </form>
-  </container>
+
 {% endblock %}
