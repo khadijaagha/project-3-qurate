@@ -128,11 +128,11 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 
 
 def delete_post(request, post_id):
-    post = Post.objects.get(id=post_id)
     if request.method == "POST":
+        post = Post.objects.get(id=post_id)
         post.delete()
         print("Post deleted 🗑️")
-    return redirect('detail', )
+    return redirect('detail')
 
 
 

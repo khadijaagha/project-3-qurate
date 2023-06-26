@@ -13,7 +13,8 @@ urlpatterns = [
     path('posts/<int:pk>/', views.posts_detail, name='detail'),
     path('posts/create/', views.PostCreate.as_view(), name='post_create'),
     path('posts/<int:pk>/update/', views.PostUpdate.as_view(), name='post_update'),
-    path('posts/<int:pk>/delete/', views.delete_post, name='delete_post'),
+    path('posts/<int:post_id>/delete/', views.delete_post, name='delete_post'),
+    path('posts/<int:pk>/delete/', views.PostDelete.as_view(), name='post_delete'),
     path('posts/<int:pk>/like/', views.like_post, name='like_post'),
     #! --------- SEARCH URL
     path('qurate/search/', views.search, name='search'),
