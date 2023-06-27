@@ -63,36 +63,41 @@
         </div>
         <div class="comments-containers">
             <h2>Comments</h2>
-        
+
             {% for comment in comments %}
-            {{ comment.body }}
-            <br>
-            {{comment.user.username}}
-            <br>
-            <form action="{% url 'like_comment' post.id comment.id %}" method="POST">
-                {% csrf_token %}
-                {% if comment.user_liked is True %}
-                <!-- <input type="button" value=""> -->
-                <button class="comment-like">
-                  <span class="icon">
-                    <i class="fas fa-heart" style="color: #ff0000;" ></i>
-                  </span>
-                </button>
-                {% elif comment.user_liked is False %}
-                <button class="comment-like">
-                  <span class="icon">
-                    <i class="far fa-heart" style="color: #000000;"></i>
-                  </span>
-                </button>
-                {% endif %}
-                {{ comment.likes }} likes
-            </form>
+            <section class="comment-section-thing">
+              <div class="comment-left">
+                <p><strong>{{comment.user.username}}</strong></p>
+                <p>{{ comment.body }}</p>
+              </div>
+              <div class="comment-right">
+            
             {% if comment.user == request.user %}
-            <form action="{% url 'delete_comment' post.id comment.id %}" method="POST">
+            <form class="delet" action="{% url 'delete_comment' post.id comment.id %}" method="POST">
                 {% csrf_token %}
-                <button>Delete</button>
+                <button class="delet">Delete</button>
             </form>
             {% endif %}
+            <form action="{% url 'like_comment' post.id comment.id %}" method="POST">
+              {% csrf_token %}
+              {% if comment.user_liked is True %}
+              <!-- <input type="button" value=""> -->
+              <button class="comment-like">
+                <span class="icon">
+                  <i class="fas fa-heart" style="color: #ff0000;" ></i>
+                </span>
+              </button>
+              {% elif comment.user_liked is False %}
+              <button class="comment-like">
+                <span class="icon">
+                  <i class="far fa-heart" style="color: #000000;"></i>
+                </span>
+              </button>
+              {% endif %}
+              {{ comment.likes }} likes
+          </form>
+          </div>
+          </section>
             {% endfor %}
             <div class="add-comment">
                 <form action="" method="POST">
