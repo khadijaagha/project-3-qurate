@@ -28,18 +28,18 @@
             <form action="{% url 'like_post' post.id %}" method="POST">
                 {% csrf_token %}
                 {% if post.user_liked is True %}
-                <button>
+                <button class="like-button">
                   <span class="icon">
                     <i class="fas fa-heart" style="color: #ff0000;"></i>
                   </span>
-                  <div class="likes_container">{{ post.likes }}</div>
+                  <div class="likes_container">{{ post.likes }} likes</div>
                 </button>
                 {% elif post.user_liked is False %}
-                <button>
+                <button class="like-button">
                   <span class="icon">
                     <i class="far fa-heart" style="color: #000000;"></i>
                   </span>
-                  <div class="likes_container">{{ post.likes }}</div>
+                  <div class="likes_container">{{ post.likes }} likes</div>
                 </button>
                 {% endif %}
               </form>
@@ -67,34 +67,34 @@
             {% for comment in comments %}
             <section class="comment-section-thing">
               <div class="comment-left">
-                <p><strong>{{comment.user.username}}</strong></p>
+                <p><a href="{% url 'profile' post.user.profile.id %}"><strong>{{comment.user.username}}</strong></a></p>
                 <p>{{ comment.body }}</p>
               </div>
               <div class="comment-right">
             
-            {% if comment.user == request.user %}
-            <form class="delet" action="{% url 'delete_comment' post.id comment.id %}" method="POST">
-                {% csrf_token %}
-                <button class="delet">Delete</button>
-            </form>
-            {% endif %}
+            
             <form action="{% url 'like_comment' post.id comment.id %}" method="POST">
               {% csrf_token %}
               {% if comment.user_liked is True %}
-              <!-- <input type="button" value=""> -->
-              <button class="comment-like">
-                <span class="icon">
-                  <i class="fas fa-heart" style="color: #ff0000;" ></i>
-                </span>
-              </button>
+                <button class="comment-like">
+                  <span class="icon">
+                    <i class="fas fa-heart" style="color: #ff0000;" ></i>
+                  </span>
+                </button>
               {% elif comment.user_liked is False %}
-              <button class="comment-like">
-                <span class="icon">
-                  <i class="far fa-heart" style="color: #000000;"></i>
-                </span>
-              </button>
+                <button class="comment-like">
+                  <span class="icon">
+                    <i class="far fa-heart" style="color: #000000;"></i>
+                  </span>
+                </button>
               {% endif %}
               {{ comment.likes }} likes
+              {% if comment.user == request.user %}
+                <form class="delet" action="{% url 'delete_comment' post.id comment.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="delet">Delete</button>
+                </form>
+              {% endif %}
           </form>
           </div>
           </section>
