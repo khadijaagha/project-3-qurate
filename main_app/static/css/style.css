@@ -398,6 +398,17 @@ color: #095484;
    */
 } 
 
+.edit-delete {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  font-size: 14px;
+}
+
+.edit-delete > * {
+  padding: 5px;
+  width: 68px;
+}
+
 .comment-like {
   background: none;
   border: none;
