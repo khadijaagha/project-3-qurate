@@ -3,19 +3,13 @@ import boto3
 import os
 import requests
 import random
-from . import urls
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.urls import reverse_lazy
-from django.http import HttpResponse
-from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from .models import Profile, Post, Comment, User, Message, MessageRoom, Like
 from .models import *
 from .forms import UserCreationForm
 from django_ratelimit.decorators import ratelimit
@@ -24,19 +18,14 @@ from django_ratelimit.decorators import ratelimit
 def get_likes(posts, profile):
     for post in posts:
         likes = Profile.objects.filter(post_likes=post).count()
-        # print(post)
         post.likes = likes
         post.save()
         if profile.post_likes.filter(id=post.id).exists():
-            # print(post.title, post.id, "liked by user")
             post.user_liked = True
             post.save()
-            # print(type(post.user_liked))
         elif not profile.post_likes.filter(id=post.id).exists():
-            # print(post.title, post.id, "NOT liked")
             post.user_liked = False
             post.save()
-            # print(type(post.user_liked))
 
 # Create your views here.
 def home(request):
@@ -60,7 +49,6 @@ def user_feed(request):
     })
 
 def explore(request):
-        # profiles = Profile.objects.all()
         posts = Post.objects.all().order_by('created_at')
         profile = Profile.objects.get(user=request.user.id)
 
@@ -68,11 +56,9 @@ def explore(request):
 
         return render(request, 'qurate/explore.html', {
             'posts': posts,
-            # 'profile': profiles,
             'title': 'Explore'
         })
 
-# @ratelimit(key = ratelimitkey(user = 'user', rate = '10/s', method = ratelimit.ALL))
 @ratelimit(key = 'ip', rate = '79/s', method = ratelimit.ALL)
 def inspo(request):
     response = requests.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=True&q=')
@@ -101,42 +87,30 @@ def posts_detail(request, pk):
     comments = Comment.objects.filter(post=post).order_by('likes').reverse()
     profile = Profile.objects.get(user=request.user.id)
     likes = Profile.objects.filter(post_likes=post).count()
-        # print(post)
     post.likes = likes
     post.save()
     if profile.post_likes.filter(id=post.id).exists():
-        # print(post.title, post.id, "liked by user")
         post.user_liked = True
         post.save()
-        # print(type(post.user_liked))
     elif not profile.post_likes.filter(id=post.id).exists():
-        # print(post.title, post.id, "NOT liked")
         post.user_liked = False
         post.save()
-        # print(type(post.user_liked))
     if request.method == 'POST':
         comment_body = request.POST.get('comment-body')
         comment = Comment.objects.create(body=comment_body, user=request.user, post=post)
 
     for comment in comments:
         likes = Profile.objects.filter(comment_likes=comment).count()
-        # print(comment)
         comment.likes = likes
         comment.save()
         if profile.comment_likes.filter(id=comment.id).exists():
-            # print(comment.title, comment.id, "liked by user")
             comment.user_liked = True
             comment.save()
-            # print(type(comment.user_liked))
         elif not profile.comment_likes.filter(id=comment.id).exists():
-            # print(comment.title, comment.id, "NOT liked")
             comment.user_liked = False
             comment.save()
-            # print(type(comment.user_liked))
-    # comments = comments.order_by('likes').reverse()
 
     return render(request, 'posts/detail.html', {
-        #context variable
         'post': post,
         'comments': comments,
         'title': 'Post Details',   
@@ -174,8 +148,6 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
 class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
-    # if request.method == 'POST':
-    # *  success_url = '/qurate'
     success_url = reverse_lazy('user_feed')
 
 
@@ -208,7 +180,6 @@ def like_post(request, pk):
         profile.save()
         print("Like removed 👎", pk)
 
-    # return redirect('explore')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -274,10 +245,8 @@ def signup(request):
             user = form.save()
             # This is how we log a user in via code
             login(request, user)
-            # ! These two lines below have been removed, why?
             following_users = request.user.profile.follows.all()
             user_posts = Post.objects.filter(user__profile__in=following_users).order_by('created_at')
-            # !
             return redirect('user_feed')
         else:
             error_message = 'Invalid sign up - try again'
@@ -292,22 +261,18 @@ def users_detail(request, user_id):
     viewer_profile = Profile.objects.get(id=request.user.id)
     user_posts = Post.objects.filter(user=user_id)
     post_count = Post.objects.filter(user=user_id).count();
-    # ! This if else statement should probably be kept, right?
     if profile.followed_by.filter(id=request.user.id).exists():
         is_following = True;
     else:
         is_following = False;
-    # !
     get_likes(user_posts, viewer_profile)
 
     return render(request, 'users/detail.html', {
         'profile': profile,
         'title': f"{profile.user}'s Profile",
         'posts': user_posts,
-        # ! These two lines below should also probably be kept, right?
         'post_count': post_count,
         'is_following': is_following
-        # !
     })
 
 def follow(request, user_id):
@@ -331,31 +296,28 @@ def follow(request, user_id):
     })
 
 
-# ! SEARCH ----------------
+# ! ----------------  SEARCH ---------------- 
 
 def search(request):
     search_content = request.POST.get('search')
     tags = []
     users = []
     if search_content[0] == '#':
-        # ! These 3 lines below have been removed and instead there is \/
         no_hash = search_content.strip('#')
         tags = Post.objects.filter(tags__icontains=no_hash)
         profile = Profile.objects.get(user=request.user.id)
         get_likes(tags, profile)
         print(f'tags {tags}')
-        # ! This is what is here instead 
-        # ? tags = Post.objects.filter(tags__icontains=search_content)
     else:
         users = User.objects.filter(username__icontains=search_content)
-        print(f'{users}') # ! This has been removed for some reason
+        print(f'{users}')
     return render(request, 'qurate/search.html', {
-        'title': f'{search_content} Results', # ! This has been removed for some reason
+        'title': f'{search_content} Results',
         'users': users,
         'tags': tags,
     })
 
-# * Messages was all removed, so definitely keeping it
+
 # ! ---------------- MESSAGES ----------------
 def MessageIndex(request):
     all_rooms = MessageRoom.objects.filter(participants=request.user)
@@ -399,5 +361,3 @@ def message_room(request, room_id):
         'receiver': receiver,
         'title': room
     })
-
-

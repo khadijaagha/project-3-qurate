@@ -613,3 +613,8 @@ input:-webkit-autofill:active{
   font-family: 'DM Serif Display', serif;
   font-size: 4vmin;
 }
+
+i.material-icons {
+  color: black;
+  font-size: 16px;
+}
