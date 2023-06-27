@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="content">
-        <a href="{% url 'detail' post.id %}">{{post.title}} {{ post.id }}</a>
+        <a href="{% url 'detail' post.id %}">{{post.title}}</a>
         <div class="dropdown-like-container">
             <div class="description_container">{{ post.description }}</div>
             <a href="{% url 'tags' tags=post.tags %}"><p>#{{ post.tags }}</p></a>
@@ -42,19 +42,15 @@
                 </button>
                 {% endif %}
               </form>
-              {% if request.user == post.user %}
-              <div class="edit-delete">
-                <form class="edit2" action="{% url 'post_delete' post.id %}" method="POST">
-                  {% csrf_token %}
-                  <button class="edit">Delete</button>
-                </form>
-
-                <form action="{% url 'post_update' post.id %}" method="GET">
-                  
-                  {% csrf_token %}
-                  <button class="edit">Edit</button>
-                </form>
-              </div>
+          {% if request.user == post.user %}
+              <form class="edit2" action="{% url 'post_delete' post.id %}" method="POST">
+                {% csrf_token %}
+                <button class="edit">Delete</button>
+              </form>
+              <form action="{% url 'post_update' post.id %}" method="GET">
+                {% csrf_token %}
+                <button class="edit">Edit</button>
+              </form>
           {% endif %}
         </div>
       </div>

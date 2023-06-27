@@ -380,7 +380,6 @@ margin-top: 30px;
 background-color: #e4f3ff;
 color: #095484;
 /* padding-top: 20%; */
-border: 1px solid red;
 }
 
 
@@ -617,4 +616,33 @@ input:-webkit-autofill:active{
 i.material-icons {
   color: black;
   font-size: 16px;
+}
+
+.comment-section-thing {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+
+}
+
+.comment-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.delet {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.comments-containers {
+  padding-left: .5vw;
+  padding-right: .5vw;
 }

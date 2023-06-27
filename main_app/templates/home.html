@@ -62,19 +62,18 @@
             let colour1; 
             let colour2;
             let colour3;
-            setInterval(function() {
+
                 const cubes = Array.from(document.querySelectorAll('.colour-change > a'));
                 const bigCube = document.querySelector('.colour-change');
                 cubes.forEach(function(c) {
-                    colour1 = String(Math.floor(Math.random() * 150));
-                    colour2 = String(Math.floor(Math.random() * 230));
-                    colour3 = String(255);
+                    colour1 = String(129);
+                    colour2 = String(203);
+                    colour3 = String(219);
 
                     console.log(colour1, colour2, colour3)
                     c.style.backgroundColor = 'rgb(' + colour1 + ', ' + colour2 + ', ' + colour3 + ')';
+                    c.style.border = '1px solid #68a3b0'
                 })
-                // bigCube.style.boxShadow = '0 0 7vmin 0.4vmin rgb(' + colour1 + ', ' + colour2 + ', ' + colour3 + ')';
-            }, 1000)
         })
     </script>
 </body>
