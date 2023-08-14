@@ -33,17 +33,29 @@ Django, Python as the programming language, HTML, CSS and DTL (Django Template L
 **Brief**
 Your App Must:
 ☐ Be a full-stack Django application.
+
 ☐ Connect to and perform data operations on a PostgreSQL database (the default SQLLite3 database is not acceptable).
+
 ☐ If consuming an API (OPTIONAL), have at least one data entity (Model) in addition to the built-in User model. The related entity can be either a one-to-many (1:M) or a many-to-many (M:M) relationship.
+
 ☐ If not consuming an API, have at least two data entities (Models) in addition to the built-in User model. It is preferable to have at least one one-to-many (1:M) and one many-to-many (M:M) relationship between entities/models.
+
 ☐ Have full-CRUD data operations across any combination of the app's models (excluding the User model). For example, creating/reading/updating posts and creating/deleting comments qualifies as full-CRUD data operations.
+
 ☐ Authenticate users using Django's built-in authentication.
+
 ☐ Implement authorization by restricting access to the Creation, Updating & Deletion of data resources using the login_required decorator in the case of view functions; or, in the case of class-based views, inheriting from the LoginRequiredMixin class.
+
 ☐ Be deployed online using Heroku. Presentations must use the deployed application.
+
 The app may optionally:
+
 ☐ Upload images to AWS S3
+
 ☐ Consume an API (installation of the Requests package will be necessary)
+
 Other Requirements:
+
 ☐ Your team must manage team contributions and collaboration using Git/GitHub team work-flow. Here are some references:
 
 
@@ -60,10 +72,15 @@ Below is a Trello page used as our project management tool:
 In our Trello, we created an ice box of features that we would want to implement and then in our Current/MVP were the must haves/requirements. As they were completed we would move them into the completed box. There were a few things from our icebox that we managed to implement, this includes a search bar, followers list, chat function and an art collections API that would serve as our ‘inspiration’ page. 
 
 
+<img width="1122" alt="Screenshot 2023-08-14 at 15 51 02" src="https://github.com/khadijaagha/project-3-qurate/assets/130927994/4f58e9c6-2c90-48ae-8572-c2afebf433ca">
 
 
 
 In the start when deciding our other data entities and models we created an Entity Relationship Diagram (ERD). Our data models apart from the user include; profile, posts, tags and comments. In order to perform CRUD on our users with more flexibility we created the profile model which is essentially referencing the user model. 
+
+
+<img width="957" alt="Screenshot 2023-08-14 at 15 51 26" src="https://github.com/khadijaagha/project-3-qurate/assets/130927994/062400f3-f3ee-4968-9932-b41487360d8c">
+
 
 
 In the planning stages, we also created wireframes of our app on Figma. We looked at many websites for inspiration to ensure a clean and cohesive UI. Some websites we looked at were Saatchi Gallery and awwwards.com.
@@ -75,11 +92,16 @@ In the planning stages, we also created wireframes of our app on Figma. We looke
 I did the initial routing and rendering of the basic HTML templates. I worked on being able to add comments to individual posts, I also worked on the liking of posts and comments functionality. Through agreement, my team member further refined the like functionality as we preferred the way he wrote it. Additionally I worked on the basic CRUD delete and edit actions. Lastly, I worked on the CSS of the post details page.
 
 
+<img width="970" alt="Screenshot 2023-08-14 at 15 51 47" src="https://github.com/khadijaagha/project-3-qurate/assets/130927994/ac7721ff-edd0-4b1f-a043-953b65fb2518">
+
+
+
 This was the first time where I was utilising the print function to see if the endpoint was even reaching the desired function. 
 This function handles the deletion of a post with the specified post_id. It ensures that the deletion is performed only when the request method is "POST" to prevent accidental deletions. After successful deletion, it reloads the 'explore.html' template with the updated list of posts for the user to view.
 
 
 
+<img width="645" alt="Screenshot 2023-08-14 at 15 52 08" src="https://github.com/khadijaagha/project-3-qurate/assets/130927994/b7c32182-e14b-4622-affd-e74539793374">
 
 
 
@@ -87,10 +109,14 @@ This function handles the deletion of a post with the specified post_id. It ensu
 Here I am defining the function to display the details of a post after clicking on it. The post will display how many likes it has and ensures a user cannot like a post again if they already have. The function is also displaying the comments, the number of likes on each comment, again a user cannot like a comment again.
 
 
+<img width="669" alt="Screenshot 2023-08-14 at 15 52 17" src="https://github.com/khadijaagha/project-3-qurate/assets/130927994/3314f6ef-52cb-43ef-923a-bb55cfc67cdb">
+
+
 
 These two functions are quite simple. In the PostDelete function, for some reason the success url would give an error in the browser when navigating back to the user’s feed after deleting a post. So after researching I came across reverse_lazy that seemed to do the trick. 
 
 
+<img width="645" alt="Screenshot 2023-08-14 at 15 52 33" src="https://github.com/khadijaagha/project-3-qurate/assets/130927994/248355dd-6f4a-4f0b-90da-0e7b3d2ef8e2">
 
 
 
@@ -104,11 +130,12 @@ On the other hand, if the post has already been liked by the user (i.e., it exis
 After handling the like/unlike action, the function redirects the user back to the page they were previously on. This is achieved using the HttpResponseRedirect class provided by Django, and it makes use of the 'HTTP_REFERER' key from request.META to obtain the referring URL.
 
 
-
-
+<img width="650" alt="Screenshot 2023-08-14 at 15 52 58" src="https://github.com/khadijaagha/project-3-qurate/assets/130927994/45861e50-f8c5-4db0-993e-3d6d5ba5ca4e">
 
 
 This is the like_comment function
+
+
 The first two lines of the function retrieve the Comment object and the Profile object corresponding to the comment_id and the currently logged-in user respectively. The if block checks whether the current user (represented by the profile) has already liked the comment. It does this by querying the comment_likes ManyToMany relationship on the Profile model to see if the comment with the given comment_id exists in the set of liked comments.
 If the comment has not been liked by the user (i.e., it doesn't exist in profile.comment_likes), the code enters the if block. Inside the if block, it adds the comment object to the profile.comment_likes set using the add() method, indicating that the user has liked the comment. After adding the comment, it saves the changes to the profile object.
 On the other hand, if the comment has already been liked by the user (i.e., it exists in profile.comment_likes), the code enters the elif block. Inside the elif block, it removes the comment object from the profile.comment_likes set using the remove() method, indicating that the user wants to undo their like. After removing the comment, it saves the changes to the profile object.
